@@ -36,15 +36,20 @@ class Card extends React.Component {
     };
   }
 
+  play() {
+    if (!this.props.isPlayable) {
+      alert('Card ' + this.props.rawValue + ' is not playable');
+    } else {
+      alert('OK');
+    }
+  }
+
   render() {
     let classNames = 'card ';
     classNames +=
       this.state.color === 's' || this.state.color === 'c' ? 'black' : 'red';
     return (
-      <button
-        className={classNames}
-        onClick={() => alert('Card ' + this.props.rawValue)}
-      >
+      <button className={classNames} onClick={() => this.play()}>
         {this.state.value + ' ' + constants.COLOR_TO_SYMBOL[this.state.color]}
       </button>
     );
@@ -57,7 +62,7 @@ class Hand extends React.Component {
       ? constants.NB_CARDS - this.props.round - 1
       : constants.NB_CARDS - this.props.round;
     return this.props.rawValues.filter((v, i) => i < nbCards).map(function(v) {
-      return <Card key={v} rawValue={v} />;
+      return <Card key={v} rawValue={v} isPlayable={true} />; // TODO: make it parameter
     });
   }
 
