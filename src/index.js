@@ -80,6 +80,27 @@ class Hand extends React.Component {
   }
 }
 
+class RoundCards extends React.Component {
+  render() {
+    return (
+      <div className="board-game-center">
+        <div className="west">
+          <Card key={'7s'} rawValue={'7s'} isPlayable={false} />
+        </div>
+        <div className="east">
+          <Card key={'7s'} rawValue={'7s'} isPlayable={false} />
+        </div>
+        <div className="north">
+          <Card key={'7s'} rawValue={'7s'} isPlayable={false} />
+        </div>
+        <div className="south">
+          <Card key={'7s'} rawValue={'7s'} isPlayable={false} />
+        </div>
+      </div>
+    );
+  }
+}
+
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -154,6 +175,7 @@ class Game extends React.Component {
             isCurrentPlayer={'south' === this.state.currentPlayer}
             round={this.state.round}
           />
+          <RoundCards />
         </div>
         <div className="rules">
           <p>Heart -> &#x2665;</p>

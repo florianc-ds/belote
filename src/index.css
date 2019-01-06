@@ -39,12 +39,14 @@ header {
     position: absolute;
     left: 10px;
     top: 50%;
+    transform: translate(0%, -50%);
 }
 
 .east {
     position: absolute;
     right: 10px;
     top: 50%;
+    transform: translate(0%, -50%);
 }
 
 .north {
@@ -69,6 +71,15 @@ header {
 .cards-hand {
 }
 
+.board-game-center {
+    position: absolute;
+    top: 50%;
+    height: 40%;
+    left: 50%;
+    width: 20%;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgb(0, 0, 0);
+}
 .status {
     margin-bottom: 5px;
     text-align:center;
