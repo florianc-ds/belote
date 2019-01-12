@@ -32,9 +32,17 @@ class Card extends React.Component {
     this.state = {
       clicked: false,
       value: this.props.rawValue.substring(0, this.props.rawValue.length - 1),
-      color: this.props.rawValue.substring(this.props.rawValue.length - 1)
+      color: this.props.rawValue.substring(this.props.rawValue.length - 1),
+      isHovered: false
     };
     this.play = this.play.bind(this);
+    this.handleHover = this.handleHover.bind(this);
+  }
+
+  handleHover() {
+    this.setState({
+      isHovered: !this.state.isHovered
+    });
   }
 
   play() {
@@ -48,9 +56,17 @@ class Card extends React.Component {
   render() {
     let classNames = 'card ';
     classNames +=
-      this.state.color === 's' || this.state.color === 'c' ? 'black' : 'red';
+      this.state.color === 's' || this.state.color === 'c' ? 'black ' : 'red ';
+    if (this.state.isHovered) {
+      classNames += this.props.isPlayable ? 'playable ' : 'not-playable ';
+    }
     return (
-      <button className={classNames} onClick={this.play}>
+      <button
+        className={classNames}
+        onClick={this.play}
+        onMouseEnter={this.handleHover}
+        onMouseLeave={this.handleHover}
+      >
         {this.state.value + ' ' + constants.COLOR_TO_SYMBOL[this.state.color]}
       </button>
     );

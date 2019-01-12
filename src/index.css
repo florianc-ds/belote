@@ -16,6 +16,7 @@ header {
     background: rgb(43, 75, 17);
 }
 
+/* CARDS STYLES */
 .card {
     background: rgb(211, 208, 208);
     border: 2px solid rgb(0, 0, 0);
@@ -35,6 +36,15 @@ header {
     color: black;
 }
 
+.not-playable {
+    border: 1px solid rgb(255, 0, 0);
+}
+
+.playable {
+    border: 1px solid rgb(6, 209, 23);
+}
+
+/* CROSS-USE STYLES */
 .west {
     position: absolute;
     left: 10px;
