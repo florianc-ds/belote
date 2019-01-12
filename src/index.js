@@ -34,6 +34,7 @@ class Card extends React.Component {
       value: this.props.rawValue.substring(0, this.props.rawValue.length - 1),
       color: this.props.rawValue.substring(this.props.rawValue.length - 1)
     };
+    this.play = this.play.bind(this);
   }
 
   play() {
@@ -49,7 +50,7 @@ class Card extends React.Component {
     classNames +=
       this.state.color === 's' || this.state.color === 'c' ? 'black' : 'red';
     return (
-      <button className={classNames} onClick={() => this.play()}>
+      <button className={classNames} onClick={this.play}>
         {this.state.value + ' ' + constants.COLOR_TO_SYMBOL[this.state.color]}
       </button>
     );
