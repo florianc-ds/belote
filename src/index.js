@@ -13,7 +13,7 @@ import * as constants from './constants.js';
 
 // REPLACE CURRENT CARDS WITH {'\u{1F0C2}'}, ... (cf https://en.wikipedia.org/wiki/Playing_cards_in_Unicode)
 
-function settleWinningCard(cards, trumpColor) {}
+//function settleWinningCard(cards, trumpColor) {}
 
 function shuffleArray(array) {
   let i = array.length - 1;
@@ -101,7 +101,7 @@ class RoundCards extends React.Component {
       .filter((k, index) => cards[k] != null)
       .map(function(k, index) {
         return (
-          <div className={k}>
+          <div key={k} className={k}>
             <Card key={cards[k]} rawValue={cards[k]} isPlayable={false} />
           </div>
         );
@@ -115,7 +115,7 @@ class RoundCards extends React.Component {
 class Game extends React.Component {
   constructor(props) {
     super(props);
-    const shuffledCards = shuffleArray(constants.PLAYING_CARDS);
+    const shuffledCards = shuffleArray(Array.from(constants.PLAYING_CARDS));
     this.state = {
       turn: 0,
       playersCards: {
