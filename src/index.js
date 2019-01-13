@@ -131,7 +131,7 @@ class Game extends React.Component {
       },
       gameHistory: { west: [], east: [], north: [], south: [] },
       roundCards: { west: null, east: '10h', north: 'Kd', south: 'Jc' },
-      points: { 'east/west': 0, 'north/south': 0 },
+      score: { 'east/west': 0, 'north/south': 0 },
       gameFirstPlayer: 'west',
       turnFirstPlayer: 'west',
       currentPlayer: 'west',

@@ -12,8 +12,6 @@ export const NEXT_PLAYER = {
   north: 'west'
 };
 
-export const NB_CARDS = 8;
-
 export const PLAYING_CARDS = [
   '7h',
   '8h',
