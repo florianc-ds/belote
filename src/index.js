@@ -35,13 +35,6 @@ class Card extends React.Component {
       isHovered: false
     };
     this.play = this.play.bind(this);
-    this.handleHover = this.handleHover.bind(this);
-  }
-
-  handleHover() {
-    this.setState({
-      isHovered: !this.state.isHovered
-    });
   }
 
   play() {
@@ -63,8 +56,8 @@ class Card extends React.Component {
       <button
         className={classNames}
         onClick={this.play}
-        onMouseEnter={this.handleHover}
-        onMouseLeave={this.handleHover}
+        onMouseOver={() => this.setState({ isHovered: true })}
+        onMouseLeave={() => this.setState({ isHovered: false })}
       >
         {this.state.value + ' ' + constants.COLOR_TO_SYMBOL[this.state.color]}
       </button>
