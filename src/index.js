@@ -115,13 +115,14 @@ class RoundCards extends React.Component {
 class Game extends React.Component {
   constructor(props) {
     super(props);
+    const shuffledCards = shuffleArray(constants.PLAYING_CARDS);
     this.state = {
       turn: 0,
       playersCards: {
-        west: constants.PLAYING_CARDS.slice(0, 8),
-        east: constants.PLAYING_CARDS.slice(8, 16),
-        north: constants.PLAYING_CARDS.slice(16, 24),
-        south: constants.PLAYING_CARDS.slice(24, 32)
+        west: shuffledCards.slice(0, 8),
+        east: shuffledCards.slice(8, 16),
+        north: shuffledCards.slice(16, 24),
+        south: shuffledCards.slice(24, 32)
       },
       gameHistory: { west: [], east: [], north: [], south: [] },
       roundCards: { west: null, east: '10h', north: 'Kd', south: 'Jc' },
@@ -221,18 +222,6 @@ class Game extends React.Component {
           <p>Spade -> &#x2660;</p>
           <p>Club -> &#x2663;</p>
           <p>Diamond -> &#x2666;</p>
-          <button
-            onClick={() =>
-              this.setState({
-                dealtCards: shuffleArray(constants.PLAYING_CARDS),
-                round: 0,
-                turnFirstPlayer: 'west',
-                currentPlayer: 'west'
-              })
-            }
-          >
-            DEAL
-          </button>
           <button onClick={() => this.mockNextPlayer()}>NEXT</button>
         </div>
       </>
