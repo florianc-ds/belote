@@ -72,8 +72,8 @@ class Hand extends React.Component {
         <Card
           key={v}
           rawValue={v}
-          isPlayable={props.arePlayableCards[i]}
           player={props.player}
+          isPlayable={props.arePlayableCards[i]}
           playCard={props.playCard}
         />
       );
@@ -157,17 +157,6 @@ class Game extends React.Component {
 
   endRound() {}
 
-  hasPlayedThisTurn(player) {
-    let p = this.state.turnFirstPlayer;
-    while (p !== this.state.currentPlayer) {
-      if (p === player) {
-        return true;
-      }
-      p = constants.NEXT_PLAYER[p];
-    }
-    return false;
-  }
-
   mockNextPlayer() {
     this.setState({
       currentPlayer: constants.NEXT_PLAYER[this.state.currentPlayer]
@@ -192,7 +181,6 @@ class Game extends React.Component {
           <Hand
             player="west"
             rawValues={this.state.playersCards['west']}
-            hasPlayedThisTurn={this.hasPlayedThisTurn('west')}
             isCurrentPlayer={'west' === this.state.currentPlayer}
             arePlayableCards={this.state.playersCards['west'].map(c =>
               this.checkPlayability(c, 'west', this.state)
@@ -202,7 +190,6 @@ class Game extends React.Component {
           <Hand
             player="east"
             rawValues={this.state.playersCards['east']}
-            hasPlayedThisTurn={this.hasPlayedThisTurn('east')}
             isCurrentPlayer={'east' === this.state.currentPlayer}
             arePlayableCards={this.state.playersCards['east'].map(c =>
               this.checkPlayability(c, 'east', this.state)
@@ -212,7 +199,6 @@ class Game extends React.Component {
           <Hand
             player="north"
             rawValues={this.state.playersCards['north']}
-            hasPlayedThisTurn={this.hasPlayedThisTurn('north')}
             isCurrentPlayer={'north' === this.state.currentPlayer}
             arePlayableCards={this.state.playersCards['north'].map(c =>
               this.checkPlayability(c, 'north', this.state)
@@ -222,7 +208,6 @@ class Game extends React.Component {
           <Hand
             player="south"
             rawValues={this.state.playersCards['south']}
-            hasPlayedThisTurn={this.hasPlayedThisTurn('south')}
             isCurrentPlayer={'south' === this.state.currentPlayer}
             arePlayableCards={this.state.playersCards['south'].map(c =>
               this.checkPlayability(c, 'south', this.state)
