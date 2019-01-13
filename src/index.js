@@ -78,17 +78,19 @@ class Hand extends React.Component {
     const nbCards = this.props.hasPlayedThisTurn
       ? constants.NB_CARDS - this.props.round - 1
       : constants.NB_CARDS - this.props.round;
-    return this.props.rawValues.filter((v, i) => i < nbCards).map(function(v) {
-      return (
-        <Card
-          key={v}
-          rawValue={v}
-          isPlayable={true}
-          player={props.player}
-          playCard={props.playCard}
-        />
-      ); // TODO: make it parameter
-    });
+    return this.props.rawValues
+      .filter((v, i) => i < nbCards)
+      .map(function(v, i) {
+        return (
+          <Card
+            key={v}
+            rawValue={v}
+            isPlayable={props.arePlayableCards[i]}
+            player={props.player}
+            playCard={props.playCard}
+          />
+        );
+      });
   }
 
   hasPlayed() {}
@@ -163,6 +165,10 @@ class Game extends React.Component {
     }));
   }
 
+  checkPlayability(card, player, state) {
+    return player === state.currentPlayer;
+  }
+
   endRound() {}
 
   hasPlayedThisTurn(player) {
@@ -203,6 +209,9 @@ class Game extends React.Component {
             hasPlayedThisTurn={this.hasPlayedThisTurn('west')}
             isCurrentPlayer={'west' === this.state.currentPlayer}
             round={this.state.round}
+            arePlayableCards={this.state.playersCards['west'].map(c =>
+              this.checkPlayability(c, 'west', this.state)
+            )}
             playCard={this.playCard}
           />
           <Hand
@@ -211,6 +220,9 @@ class Game extends React.Component {
             hasPlayedThisTurn={this.hasPlayedThisTurn('east')}
             isCurrentPlayer={'east' === this.state.currentPlayer}
             round={this.state.round}
+            arePlayableCards={this.state.playersCards['east'].map(c =>
+              this.checkPlayability(c, 'east', this.state)
+            )}
             playCard={this.playCard}
           />
           <Hand
@@ -219,6 +231,9 @@ class Game extends React.Component {
             hasPlayedThisTurn={this.hasPlayedThisTurn('north')}
             isCurrentPlayer={'north' === this.state.currentPlayer}
             round={this.state.round}
+            arePlayableCards={this.state.playersCards['north'].map(c =>
+              this.checkPlayability(c, 'north', this.state)
+            )}
             playCard={this.playCard}
           />
           <Hand
@@ -227,6 +242,9 @@ class Game extends React.Component {
             hasPlayedThisTurn={this.hasPlayedThisTurn('south')}
             isCurrentPlayer={'south' === this.state.currentPlayer}
             round={this.state.round}
+            arePlayableCards={this.state.playersCards['south'].map(c =>
+              this.checkPlayability(c, 'south', this.state)
+            )}
             playCard={this.playCard}
           />
           <RoundCards cards={this.state.roundCards} />
