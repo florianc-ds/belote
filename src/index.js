@@ -67,7 +67,12 @@ class Card extends React.Component {
 
 class Hand extends React.Component {
   renderCards(props) {
-    return this.props.rawValues.map(function(v, i) {
+    props.rawValues.sort(function(a, b) {
+      return (
+        constants.PLAYING_CARDS.indexOf(a) - constants.PLAYING_CARDS.indexOf(b)
+      );
+    });
+    return props.rawValues.map(function(v, i) {
       return (
         <Card
           key={v}
