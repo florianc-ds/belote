@@ -30,7 +30,6 @@ class Card extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      clicked: false,
       value: this.props.rawValue.substring(0, this.props.rawValue.length - 1),
       color: this.props.rawValue.substring(this.props.rawValue.length - 1),
       isHovered: false
@@ -124,7 +123,6 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      clicked: false,
       turn: 0,
       playersCards: {
         west: constants.PLAYING_CARDS.slice(0, 8),
