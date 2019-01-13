@@ -155,6 +155,11 @@ class Game extends React.Component {
         [player]: card
       }
     }));
+    // next player
+    this.setState(prevState => ({
+      currentPlayer: constants.NEXT_PLAYER[prevState.currentPlayer]
+    }));
+  }
   }
 
   checkPlayability(card, player, state) {
