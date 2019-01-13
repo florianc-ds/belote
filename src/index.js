@@ -49,7 +49,7 @@ class Card extends React.Component {
     if (!this.props.isPlayable) {
       alert('Card ' + this.props.rawValue + ' is not playable');
     } else {
-      alert('OK');
+      this.props.playCard(this.props.rawValue, this.props.player);
     }
   }
 
@@ -74,12 +74,20 @@ class Card extends React.Component {
 }
 
 class Hand extends React.Component {
-  renderCards() {
+  renderCards(props) {
     const nbCards = this.props.hasPlayedThisTurn
       ? constants.NB_CARDS - this.props.round - 1
       : constants.NB_CARDS - this.props.round;
     return this.props.rawValues.filter((v, i) => i < nbCards).map(function(v) {
-      return <Card key={v} rawValue={v} isPlayable={true} />; // TODO: make it parameter
+      return (
+        <Card
+          key={v}
+          rawValue={v}
+          isPlayable={true}
+          player={props.player}
+          playCard={props.playCard}
+        />
+      ); // TODO: make it parameter
     });
   }
 
@@ -91,7 +99,7 @@ class Hand extends React.Component {
         <div className="status">
           {this.props.isCurrentPlayer ? 'Playing...' : 'Waiting...'}
         </div>
-        <div className="cards-hand">{this.renderCards()}</div>
+        <div className="cards-hand">{this.renderCards(this.props)}</div>
       </div>
     );
   }
@@ -121,14 +129,40 @@ class Game extends React.Component {
     this.state = {
       clicked: false,
       turn: 0,
-      dealtCards: constants.PLAYING_CARDS,
+      playersCards: {
+        west: constants.PLAYING_CARDS.slice(0, 8),
+        east: constants.PLAYING_CARDS.slice(8, 16),
+        north: constants.PLAYING_CARDS.slice(16, 24),
+        south: constants.PLAYING_CARDS.slice(24, 32)
+      },
+      gameHistory: { west: [], east: [], north: [], south: [] },
       roundCards: { west: null, east: '10h', north: 'Kd', south: 'Jc' },
       gameFirstPlayer: 'west',
       turnFirstPlayer: 'west',
       currentPlayer: 'west',
       round: 0
     };
+    this.playCard = this.playCard.bind(this);
   }
+
+  playCard(card, player) {
+    // remove card from player hand
+    this.setState(prevState => ({
+      playersCards: {
+        ...prevState.playersCards,
+        [player]: prevState.playersCards[player].filter(key => key !== card)
+      }
+    }));
+    // create card in roundCards
+    this.setState(prevState => ({
+      roundCards: {
+        ...prevState.roundCards,
+        [player]: card
+      }
+    }));
+  }
+
+  endRound() {}
 
   hasPlayedThisTurn(player) {
     let p = this.state.turnFirstPlayer;
@@ -164,31 +198,35 @@ class Game extends React.Component {
         <div className="board-game">
           <Hand
             player="west"
-            rawValues={this.state.dealtCards.slice(0, 8)}
+            rawValues={this.state.playersCards['west']}
             hasPlayedThisTurn={this.hasPlayedThisTurn('west')}
             isCurrentPlayer={'west' === this.state.currentPlayer}
             round={this.state.round}
+            playCard={this.playCard}
           />
           <Hand
             player="east"
-            rawValues={this.state.dealtCards.slice(8, 16)}
+            rawValues={this.state.playersCards['east']}
             hasPlayedThisTurn={this.hasPlayedThisTurn('east')}
             isCurrentPlayer={'east' === this.state.currentPlayer}
             round={this.state.round}
+            playCard={this.playCard}
           />
           <Hand
             player="north"
-            rawValues={this.state.dealtCards.slice(16, 24)}
+            rawValues={this.state.playersCards['north']}
             hasPlayedThisTurn={this.hasPlayedThisTurn('north')}
             isCurrentPlayer={'north' === this.state.currentPlayer}
             round={this.state.round}
+            playCard={this.playCard}
           />
           <Hand
             player="south"
-            rawValues={this.state.dealtCards.slice(24, 32)}
+            rawValues={this.state.playersCards['south']}
             hasPlayedThisTurn={this.hasPlayedThisTurn('south')}
             isCurrentPlayer={'south' === this.state.currentPlayer}
             round={this.state.round}
+            playCard={this.playCard}
           />
           <RoundCards cards={this.state.roundCards} />
         </div>
