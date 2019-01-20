@@ -13,8 +13,6 @@ import * as constants from './constants.js';
 
 // REPLACE CURRENT CARDS WITH {'\u{1F0C2}'}, ... (cf https://en.wikipedia.org/wiki/Playing_cards_in_Unicode)
 
-//function settleWinningCard(cards, trumpColor) {}
-
 function shuffleArray(array) {
   let i = array.length - 1;
   for (; i > 0; i--) {
@@ -141,14 +139,15 @@ class Game extends React.Component {
       roundCards: { west: null, east: '10h', north: 'Kd', south: 'Jc' },
       score: { 'east/west': 0, 'north/south': 0 },
       gameFirstPlayer: 'west',
-      turnFirstPlayer: 'west',
       currentPlayer: 'west',
+      trumpColor: 'h',
       turnColor: null,
       round: 0,
       deactivated: false // parameter used to describe a frozen state where nothing is activable
     };
     this.playCard = this.playCard.bind(this);
     this.endRound = this.endRound.bind(this);
+    this.settleWinner = this.settleWinner.bind(this);
   }
 
   playCard(card, player) {
@@ -185,11 +184,53 @@ class Game extends React.Component {
     }
   }
 
+  settleWinner() {
+    var winner = null;
+    const trumpRanking = Object.keys(this.state.roundCards)
+      .filter(
+        (k, index) =>
+          extractColorFromCardRepr(this.state.roundCards[k]) ===
+          this.state.trumpColor
+      )
+      .sort(
+        (a, b) =>
+          constants.TRUMP_POINTS[
+            extractValueFromCardRepr(this.state.roundCards[b])
+          ] -
+          constants.TRUMP_POINTS[
+            extractValueFromCardRepr(this.state.roundCards[a])
+          ]
+      );
+    if (trumpRanking.length > 0) {
+      winner = trumpRanking[0];
+    } else {
+      const turnColorRanking = Object.keys(this.state.roundCards)
+        .filter(
+          (k, index) =>
+            extractColorFromCardRepr(this.state.roundCards[k]) ===
+            this.state.turnColor
+        )
+        .sort(
+          (a, b) =>
+            constants.PLAIN_POINTS[
+              extractValueFromCardRepr(this.state.roundCards[b])
+            ] -
+            constants.PLAIN_POINTS[
+              extractValueFromCardRepr(this.state.roundCards[a])
+            ]
+        );
+      winner = turnColorRanking[0];
+    }
+    return winner;
+  }
+
   endRound() {
     alert('END OF ROUND ' + this.state.round);
+    const winner = this.settleWinner();
     this.setState(prevState => ({
       round: prevState.round + 1,
       roundCards: { west: null, east: null, north: null, south: null },
+      currentPlayer: winner,
       score: {
         'east/west': prevState.score['east/west'] + 10,
         'north/south': prevState.score['north/south'] + 20
