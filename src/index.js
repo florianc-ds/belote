@@ -135,6 +135,7 @@ class Game extends React.Component {
       gameFirstPlayer: 'west',
       turnFirstPlayer: 'west',
       currentPlayer: 'west',
+      turnColor: null,
       round: 0,
       deactivated: false // parameter used to describe a frozen state where nothing is activable
     };
@@ -157,14 +158,19 @@ class Game extends React.Component {
         [player]: card
       }
     }));
-    // end the turn if last player
-    if (
-      Object.values(this.state.roundCards).filter(v => v != null).length === 3
-    ) {
+    const nbPlayedCards = Object.values(this.state.roundCards).filter(
+      v => v != null
+    ).length;
+
+    if (nbPlayedCards === 3) {
+      // end the turn if last player
       setTimeout(this.endRound, 1000);
       this.setState({ deactivated: true });
     } else {
-      // next player
+      if (nbPlayedCards === 0) {
+        // first card to be played this turn
+        this.setState({ turnColor: card.substring(card.length - 1) });
+      }
       this.setState(prevState => ({
         currentPlayer: constants.NEXT_PLAYER[prevState.currentPlayer]
       }));
