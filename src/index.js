@@ -185,17 +185,6 @@ class Game extends React.Component {
   }
 
   checkPlayability(card, player, state) {
-
-  mockNextPlayer() {
-    this.setState({
-      currentPlayer: constants.NEXT_PLAYER[this.state.currentPlayer]
-    });
-    if (
-      constants.NEXT_PLAYER[this.state.currentPlayer] ===
-      this.state.turnFirstPlayer
-    ) {
-      this.setState({ round: this.state.round + 1 });
-    }
     return !state.deactivated & (player === state.currentPlayer);
   }
 
@@ -251,7 +240,6 @@ class Game extends React.Component {
           <p>Spade -> &#x2660;</p>
           <p>Club -> &#x2663;</p>
           <p>Diamond -> &#x2666;</p>
-          <button onClick={() => this.mockNextPlayer()}>NEXT</button>
         </div>
       </>
     );
