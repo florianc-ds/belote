@@ -28,6 +28,8 @@ header {
     width: 40px;
 }
 
+button:focus {outline:0;} /* Remove blue border when button is clicked */
+
 .red {
     color: rgb(165, 38, 29);
 }
