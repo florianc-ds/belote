@@ -135,9 +135,11 @@ class Game extends React.Component {
       gameFirstPlayer: 'west',
       turnFirstPlayer: 'west',
       currentPlayer: 'west',
-      round: 0
+      round: 0,
+      deactivated: false // parameter used to describe a frozen state where nothing is activable
     };
     this.playCard = this.playCard.bind(this);
+    this.endRound = this.endRound.bind(this);
   }
 
   playCard(card, player) {
@@ -155,18 +157,34 @@ class Game extends React.Component {
         [player]: card
       }
     }));
-    // next player
-    this.setState(prevState => ({
-      currentPlayer: constants.NEXT_PLAYER[prevState.currentPlayer]
-    }));
+    // end the turn if last player
+    if (
+      Object.values(this.state.roundCards).filter(v => v != null).length === 3
+    ) {
+      setTimeout(this.endRound, 1000);
+      this.setState({ deactivated: true });
+    } else {
+      // next player
+      this.setState(prevState => ({
+        currentPlayer: constants.NEXT_PLAYER[prevState.currentPlayer]
+      }));
+    }
   }
+
+  endRound() {
+    alert('END OF ROUND ' + this.state.round);
+    this.setState(prevState => ({
+      round: prevState.round + 1,
+      roundCards: { west: null, east: null, north: null, south: null },
+      score: {
+        'east/west': prevState.score['east/west'] + 10,
+        'north/south': prevState.score['north/south'] + 20
+      },
+      deactivated: false
+    }));
   }
 
   checkPlayability(card, player, state) {
-    return player === state.currentPlayer;
-  }
-
-  endRound() {}
 
   mockNextPlayer() {
     this.setState({
@@ -178,6 +196,7 @@ class Game extends React.Component {
     ) {
       this.setState({ round: this.state.round + 1 });
     }
+    return !state.deactivated & (player === state.currentPlayer);
   }
 
   componentDidMount() {
