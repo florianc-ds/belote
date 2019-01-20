@@ -45,7 +45,7 @@ class Card extends React.Component {
 
   play() {
     if (!this.props.isPlayable) {
-      alert('Card ' + this.props.rawValue + ' is not playable');
+      //alert('Card ' + this.props.rawValue + ' is not playable');
     } else {
       this.props.playCard(this.props.rawValue, this.props.player);
     }
