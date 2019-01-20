@@ -26,12 +26,20 @@ function shuffleArray(array) {
   return array;
 }
 
+function extractValueFromCardRepr(cardRepr) {
+  return cardRepr.substring(0, cardRepr.length - 1);
+}
+
+function extractColorFromCardRepr(cardRepr) {
+  return cardRepr.substring(cardRepr.length - 1);
+}
+
 class Card extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: this.props.rawValue.substring(0, this.props.rawValue.length - 1),
-      color: this.props.rawValue.substring(this.props.rawValue.length - 1),
+      value: extractValueFromCardRepr(this.props.rawValue),
+      color: extractColorFromCardRepr(this.props.rawValue),
       isHovered: false
     };
     this.play = this.play.bind(this);
@@ -169,7 +177,7 @@ class Game extends React.Component {
     } else {
       if (nbPlayedCards === 0) {
         // first card to be played this turn
-        this.setState({ turnColor: card.substring(card.length - 1) });
+        this.setState({ turnColor: extractColorFromCardRepr(card) });
       }
       this.setState(prevState => ({
         currentPlayer: constants.NEXT_PLAYER[prevState.currentPlayer]
