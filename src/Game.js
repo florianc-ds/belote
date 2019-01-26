@@ -144,8 +144,32 @@ export class Game extends React.Component {
       if (state.roundColor === state.trumpColor) {
         if (playerHasTrumpColor) {
           // trump round and player has trumps
-          return extractColorFromCardRepr(card) === state.trumpColor;
-          // WARNING: ADD CONSTRAINT: "IN TRUMP ROUND, PLAYER HIGHER THAN CURRENTLY HIGHEST ROUND CARD, IF POSSIBLE"
+          const currentlyHighestTrumpRankPlayed = Object.values(
+            state.roundCards
+          )
+            .filter(c => c != null)
+            .filter(c => extractColorFromCardRepr(c) === state.trumpColor)
+            .map(c => constants.TRUMP_RANKING[extractValueFromCardRepr(c)])
+            .sort()
+            .slice(-1)
+            .pop();
+          const playerHasHigherTrump =
+            trumpColorCards.filter(
+              c =>
+                constants.TRUMP_RANKING[extractValueFromCardRepr(c)] >
+                currentlyHighestTrumpRankPlayed
+            ).length > 0;
+          if (playerHasHigherTrump) {
+            // trump round and player has trump cards, some higher than curently highest played
+            return (
+              (constants.TRUMP_RANKING[extractValueFromCardRepr(card)] >
+                currentlyHighestTrumpRankPlayed) &
+              (extractColorFromCardRepr(card) === state.trumpColor)
+            );
+          } else {
+            // trump round and player has trump cards, all less than curently highest played
+            return extractColorFromCardRepr(card) === state.trumpColor;
+          }
         } else {
           // trump round and player has no trump
           return true;
@@ -157,7 +181,7 @@ export class Game extends React.Component {
         } else if (playerHasTrumpColor) {
           // normal round, player has not the round color but has trump color
           return extractColorFromCardRepr(card) === state.trumpColor;
-          // WARNING: ADD CONSTRAINT: "YOU DON'T HAVE TO PLAY TRUMP IF YOUR PARTNER CURRENTLY WINS THE ROUND"
+          // TODO: ADD CONSTRAINT: "YOU DON'T HAVE TO PLAY TRUMP IF YOUR PARTNER CURRENTLY WINS THE ROUND"
         } else {
           // normal round, player has not the round color neither trump color
           return true;
