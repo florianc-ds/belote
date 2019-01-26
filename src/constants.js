@@ -12,6 +12,13 @@ export const NEXT_PLAYER = {
   north: 'west'
 };
 
+export const PARTNER = {
+  west: 'east',
+  south: 'north',
+  east: 'west',
+  north: 'south'
+};
+
 export const PLAYING_CARDS = [
   '7h',
   '8h',

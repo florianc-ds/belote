@@ -179,9 +179,23 @@ export class Game extends React.Component {
           // normal round and player has round color
           return extractColorFromCardRepr(card) === state.roundColor;
         } else if (playerHasTrumpColor) {
-          // normal round, player has not the round color but has trump color
-          return extractColorFromCardRepr(card) === state.trumpColor;
-          // TODO: ADD CONSTRAINT: "YOU DON'T HAVE TO PLAY TRUMP IF YOUR PARTNER CURRENTLY WINS THE ROUND"
+          const partnerPlayedCurrentlyHighestCard =
+            state.roundCards[constants.PARTNER[player]] ===
+            Object.values(state.roundCards)
+              .filter(c => c != null)
+              .filter(c => extractColorFromCardRepr(c) === state.roundColor)
+              .sort(
+                (a, b) =>
+                  constants.PLAIN_RANKING[extractValueFromCardRepr(b)] -
+                  constants.PLAIN_RANKING[extractValueFromCardRepr(a)]
+              )[0];
+          if (partnerPlayedCurrentlyHighestCard) {
+            // normal round, player has not the round color but has trump color, but partner is currently winning
+            return true;
+          } else {
+            // normal round, player has not the round color but has trump color, and partner id not currently winning
+            return extractColorFromCardRepr(card) === state.trumpColor;
+          }
         } else {
           // normal round, player has not the round color neither trump color
           return true;
