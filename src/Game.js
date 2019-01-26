@@ -173,6 +173,10 @@ export class Game extends React.Component {
           <p>Spade -> &#x2660;</p>
           <p>Club -> &#x2663;</p>
           <p>Diamond -> &#x2666;</p>
+          <p>
+            Current Trump Color:{' '}
+            {constants.COLOR_TO_SYMBOL[this.state.trumpColor]}
+          </p>
         </div>
       </>
     );
