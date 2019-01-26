@@ -77,10 +77,10 @@ export class Game extends React.Component {
       )
       .sort(
         (a, b) =>
-          constants.TRUMP_POINTS[
+          constants.TRUMP_RANKING[
             extractValueFromCardRepr(this.state.roundCards[b])
           ] -
-          constants.TRUMP_POINTS[
+          constants.TRUMP_RANKING[
             extractValueFromCardRepr(this.state.roundCards[a])
           ]
       );
@@ -95,10 +95,10 @@ export class Game extends React.Component {
         )
         .sort(
           (a, b) =>
-            constants.PLAIN_POINTS[
+            constants.PLAIN_RANKING[
               extractValueFromCardRepr(this.state.roundCards[b])
             ] -
-            constants.PLAIN_POINTS[
+            constants.PLAIN_RANKING[
               extractValueFromCardRepr(this.state.roundCards[a])
             ]
         );
