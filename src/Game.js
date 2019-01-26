@@ -113,6 +113,7 @@ export class Game extends React.Component {
     this.setState(prevState => ({
       round: prevState.round + 1,
       roundCards: { west: null, east: null, north: null, south: null },
+      roundColor: null,
       currentPlayer: winner,
       score: {
         'east/west': prevState.score['east/west'] + 10,
@@ -123,7 +124,46 @@ export class Game extends React.Component {
   }
 
   checkPlayability(card, player, state) {
-    return !state.deactivated & (player === state.currentPlayer);
+    if (state.deactivated | (player !== state.currentPlayer)) {
+      // not player turn
+      return false;
+    } else if (state.roundColor == null) {
+      // first player
+      return true;
+    } else {
+      // player turn but not first to play
+      const playerHand = state.playersCards[player];
+      const roundColorCards = playerHand.filter(
+        c => extractColorFromCardRepr(c) === state.roundColor
+      );
+      const playerHasRoundColor = roundColorCards.length > 0;
+      const trumpColorCards = playerHand.filter(
+        c => extractColorFromCardRepr(c) === state.trumpColor
+      );
+      const playerHasTrumpColor = trumpColorCards.length > 0;
+      if (state.roundColor === state.trumpColor) {
+        if (playerHasTrumpColor) {
+          // trump round and player has trumps
+          return extractColorFromCardRepr(card) === state.trumpColor;
+          // WARNING: ADD CONSTRAINT: "IN TRUMP ROUND, PLAYER HIGHER THAN CURRENTLY HIGHEST ROUND CARD, IF POSSIBLE"
+        } else {
+          // trump round and player has no trump
+          return true;
+        }
+      } else {
+        if (playerHasRoundColor) {
+          // normal round and player has round color
+          return extractColorFromCardRepr(card) === state.roundColor;
+        } else if (playerHasTrumpColor) {
+          // normal round, player has not the round color but has trump color
+          return extractColorFromCardRepr(card) === state.trumpColor;
+          // WARNING: ADD CONSTRAINT: "YOU DON'T HAVE TO PLAY TRUMP IF YOUR PARTNER CURRENTLY WINS THE ROUND"
+        } else {
+          // normal round, player has not the round color neither trump color
+          return true;
+        }
+      }
+    }
   }
 
   componentDidMount() {
