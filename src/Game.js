@@ -124,6 +124,50 @@ export class Game extends React.Component {
   }
 
   checkPlayability(card, player, state) {
+    function checkPlayerHasColor(cards, color) {
+      const colorCards = cards.filter(
+        c => extractColorFromCardRepr(c) === color
+      );
+      return colorCards.length > 0;
+    }
+    function getCurrentlyHighestTrumpRankPlayed(roundCards, trumpColor) {
+      return Object.values(roundCards)
+        .filter(c => c != null)
+        .filter(c => extractColorFromCardRepr(c) === trumpColor)
+        .map(c => constants.TRUMP_RANKING[extractValueFromCardRepr(c)])
+        .sort()
+        .slice(-1)
+        .pop();
+    }
+    function checkPlayerHasHigherTrump(cards, trumpColor, highestTrumpRank) {
+      return (
+        cards
+          .filter(c => extractColorFromCardRepr(c) === trumpColor)
+          .filter(
+            c =>
+              constants.TRUMP_RANKING[extractValueFromCardRepr(c)] >
+              highestTrumpRank
+          ).length > 0
+      );
+    }
+    function checkPartnerPlayedCurrentlyHighestColorCard(
+      player,
+      roundCards,
+      roundColor
+    ) {
+      return (
+        roundCards[constants.PARTNER[player]] ===
+        Object.values(roundCards)
+          .filter(c => c != null)
+          .filter(c => extractColorFromCardRepr(c) === roundColor)
+          .sort(
+            (a, b) =>
+              constants.PLAIN_RANKING[extractValueFromCardRepr(b)] -
+              constants.PLAIN_RANKING[extractValueFromCardRepr(a)]
+          )[0]
+      );
+    }
+
     if (state.deactivated | (player !== state.currentPlayer)) {
       // not player turn
       return false;
@@ -133,32 +177,26 @@ export class Game extends React.Component {
     } else {
       // player turn but not first to play
       const playerHand = state.playersCards[player];
-      const roundColorCards = playerHand.filter(
-        c => extractColorFromCardRepr(c) === state.roundColor
+      const playerHasRoundColor = checkPlayerHasColor(
+        playerHand,
+        state.roundColor
       );
-      const playerHasRoundColor = roundColorCards.length > 0;
-      const trumpColorCards = playerHand.filter(
-        c => extractColorFromCardRepr(c) === state.trumpColor
+      const playerHasTrumpColor = checkPlayerHasColor(
+        playerHand,
+        state.trumpColor
       );
-      const playerHasTrumpColor = trumpColorCards.length > 0;
       if (state.roundColor === state.trumpColor) {
         if (playerHasTrumpColor) {
           // trump round and player has trumps
-          const currentlyHighestTrumpRankPlayed = Object.values(
-            state.roundCards
-          )
-            .filter(c => c != null)
-            .filter(c => extractColorFromCardRepr(c) === state.trumpColor)
-            .map(c => constants.TRUMP_RANKING[extractValueFromCardRepr(c)])
-            .sort()
-            .slice(-1)
-            .pop();
-          const playerHasHigherTrump =
-            trumpColorCards.filter(
-              c =>
-                constants.TRUMP_RANKING[extractValueFromCardRepr(c)] >
-                currentlyHighestTrumpRankPlayed
-            ).length > 0;
+          const currentlyHighestTrumpRankPlayed = getCurrentlyHighestTrumpRankPlayed(
+            state.roundCards,
+            state.trumpColor
+          );
+          const playerHasHigherTrump = checkPlayerHasHigherTrump(
+            playerHand,
+            state.trumpColor,
+            currentlyHighestTrumpRankPlayed
+          );
           if (playerHasHigherTrump) {
             // trump round and player has trump cards, some higher than curently highest played
             return (
@@ -179,17 +217,12 @@ export class Game extends React.Component {
           // normal round and player has round color
           return extractColorFromCardRepr(card) === state.roundColor;
         } else if (playerHasTrumpColor) {
-          const partnerPlayedCurrentlyHighestCard =
-            state.roundCards[constants.PARTNER[player]] ===
-            Object.values(state.roundCards)
-              .filter(c => c != null)
-              .filter(c => extractColorFromCardRepr(c) === state.roundColor)
-              .sort(
-                (a, b) =>
-                  constants.PLAIN_RANKING[extractValueFromCardRepr(b)] -
-                  constants.PLAIN_RANKING[extractValueFromCardRepr(a)]
-              )[0];
-          if (partnerPlayedCurrentlyHighestCard) {
+          const partnerPlayedCurrentlyHighestColorCard = checkPartnerPlayedCurrentlyHighestColorCard(
+            player,
+            state.roundCards,
+            state.roundColor
+          );
+          if (partnerPlayedCurrentlyHighestColorCard) {
             // normal round, player has not the round color but has trump color, but partner is currently winning
             return true;
           } else {
