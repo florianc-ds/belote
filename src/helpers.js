@@ -1,10 +1,3 @@
-// WHAT ABOUT HIDDEN HANDS?
-// WHAT ABOUT PLAYER TURN..?
-// MOVE ON HOVER
-// KEEP CARDS STATE WHEN REFRESHING PAGE (REDUX..?)
-// SORT CARDS IN HAND
-// REPLACE CURRENT CARDS WITH {'\u{1F0C2}'}, ... (cf https://en.wikipedia.org/wiki/Playing_cards_in_Unicode)
-
 export function shuffleArray(array) {
   let i = array.length - 1;
   for (; i > 0; i--) {
