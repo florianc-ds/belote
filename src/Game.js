@@ -13,7 +13,7 @@ export class Game extends React.Component {
     super(props);
     const shuffledCards = shuffleArray(Array.from(constants.PLAYING_CARDS));
     this.state = {
-      turn: 0,
+      round: 0,
       playersCards: {
         west: shuffledCards.slice(0, 8),
         east: shuffledCards.slice(8, 16),
@@ -26,8 +26,7 @@ export class Game extends React.Component {
       gameFirstPlayer: 'west',
       currentPlayer: 'west',
       trumpColor: 'h',
-      turnColor: null,
-      round: 0,
+      roundColor: null,
       deactivated: false // parameter used to describe a frozen state where nothing is activable
     };
     this.playCard = this.playCard.bind(this);
@@ -60,7 +59,7 @@ export class Game extends React.Component {
     } else {
       if (nbPlayedCards === 0) {
         // first card to be played this turn
-        this.setState({ turnColor: extractColorFromCardRepr(card) });
+        this.setState({ roundColor: extractColorFromCardRepr(card) });
       }
       this.setState(prevState => ({
         currentPlayer: constants.NEXT_PLAYER[prevState.currentPlayer]
@@ -88,11 +87,11 @@ export class Game extends React.Component {
     if (trumpRanking.length > 0) {
       winner = trumpRanking[0];
     } else {
-      const turnColorRanking = Object.keys(this.state.roundCards)
+      const roundColorRanking = Object.keys(this.state.roundCards)
         .filter(
           (k, index) =>
             extractColorFromCardRepr(this.state.roundCards[k]) ===
-            this.state.turnColor
+            this.state.roundColor
         )
         .sort(
           (a, b) =>
@@ -103,7 +102,7 @@ export class Game extends React.Component {
               extractValueFromCardRepr(this.state.roundCards[a])
             ]
         );
-      winner = turnColorRanking[0];
+      winner = roundColorRanking[0];
     }
     return winner;
   }
