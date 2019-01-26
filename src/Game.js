@@ -21,7 +21,7 @@ export class Game extends React.Component {
         south: shuffledCards.slice(24, 32)
       },
       gameHistory: { west: [], east: [], north: [], south: [] },
-      roundCards: { west: null, east: '10h', north: 'Kd', south: 'Jc' },
+      roundCards: { west: null, east: null, north: null, south: null },
       score: { 'east/west': 0, 'north/south': 0 },
       gameFirstPlayer: 'west',
       currentPlayer: 'west',
