@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card } from './Card';
+
 export class RoundCards extends React.Component {
   renderRoundCards() {
     const cards = this.props.cards;
@@ -13,6 +14,7 @@ export class RoundCards extends React.Component {
         );
       });
   }
+
   render() {
     return <div className="board-game-center">{this.renderRoundCards()}</div>;
   }

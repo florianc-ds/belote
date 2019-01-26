@@ -21,7 +21,9 @@ export class Hand extends React.Component {
       );
     });
   }
+
   hasPlayed() {}
+
   render() {
     return (
       <div className={this.props.player}>

@@ -12,6 +12,7 @@ export class Card extends React.Component {
     };
     this.play = this.play.bind(this);
   }
+
   play() {
     if (!this.props.isPlayable) {
       //alert('Card ' + this.props.rawValue + ' is not playable');
@@ -19,6 +20,7 @@ export class Card extends React.Component {
       this.props.playCard(this.props.rawValue, this.props.player);
     }
   }
+
   render() {
     let classNames = 'card ';
     classNames +=

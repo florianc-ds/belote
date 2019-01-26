@@ -34,6 +34,7 @@ export class Game extends React.Component {
     this.endRound = this.endRound.bind(this);
     this.settleWinner = this.settleWinner.bind(this);
   }
+
   playCard(card, player) {
     // remove card from player hand
     this.setState(prevState => ({
@@ -66,6 +67,7 @@ export class Game extends React.Component {
       }));
     }
   }
+
   settleWinner() {
     var winner = null;
     const trumpRanking = Object.keys(this.state.roundCards)
@@ -105,6 +107,7 @@ export class Game extends React.Component {
     }
     return winner;
   }
+
   endRound() {
     alert('END OF ROUND ' + this.state.round);
     const winner = this.settleWinner();
@@ -119,12 +122,15 @@ export class Game extends React.Component {
       deactivated: false
     }));
   }
+
   checkPlayability(card, player, state) {
     return !state.deactivated & (player === state.currentPlayer);
   }
+
   componentDidMount() {
     document.title = 'Belote';
   }
+
   render() {
     return (
       <>
