@@ -98,24 +98,50 @@ export class Game extends React.Component {
     return winner;
   }
 
+  countRoundScore(roundCards, trumpColor, round) {
+    let score = Object.values(roundCards)
+      .map(
+        c =>
+          extractColorFromCardRepr(c) === trumpColor
+            ? constants.TRUMP_POINTS[extractValueFromCardRepr(c)]
+            : constants.PLAIN_POINTS[extractValueFromCardRepr(c)]
+      )
+      .reduce((a, b) => a + b);
+    // last round counts for 10 more points
+    if (round === 7) {
+      score = score + 10;
+    }
+    return score;
+  }
+
   endRound() {
     console.log('END OF ROUND ' + this.state.round);
+    const winner = this.settleWinner(
+      this.state.roundCards,
+      this.state.roundColor,
+      this.state.trumpColor
+    );
+    const winningTeam = ['east', 'west'].includes(winner)
+      ? 'east/west'
+      : 'north/south';
+    const roundScore = this.countRoundScore(
+      this.state.roundCards,
+      this.state.trumpColor,
+      this.state.round
+    );
+    this.setState(prevState => ({
+      roundCards: { west: null, east: null, north: null, south: null },
+      roundColor: null,
+      score: {
+        ...prevState.score,
+        [winningTeam]: prevState.score[winningTeam] + roundScore
+      },
+      deactivated: false
+    }));
     if (this.state.round < 7) {
-      const winner = this.settleWinner(
-        this.state.roundCards,
-        this.state.roundColor,
-        this.state.trumpColor
-      );
       this.setState(prevState => ({
         round: prevState.round + 1,
-        roundCards: { west: null, east: null, north: null, south: null },
-        roundColor: null,
-        currentPlayer: winner,
-        score: {
-          'east/west': prevState.score['east/west'] + 10,
-          'north/south': prevState.score['north/south'] + 20
-        },
-        deactivated: false
+        currentPlayer: winner
       }));
     } else {
       this.endGame();
@@ -124,25 +150,16 @@ export class Game extends React.Component {
 
   endGame() {
     console.log('END OF GAME');
-    const EWScore = 10;
-    const NSScore = 10;
     const shuffledCards = shuffleArray(Array.from(constants.PLAYING_CARDS));
     this.setState(prevState => ({
       round: 0,
-      roundCards: { west: null, east: null, north: null, south: null },
       gameHistory: { west: [], east: [], north: [], south: [] },
       playersCards: {
         west: shuffledCards.slice(0, 8),
         east: shuffledCards.slice(8, 16),
         north: shuffledCards.slice(16, 24),
         south: shuffledCards.slice(24, 32)
-      },
-      roundColor: null,
-      score: {
-        'east/west': prevState.score['east/west'] + EWScore,
-        'north/south': prevState.score['north/south'] + NSScore
-      },
-      deactivated: false
+      }
     }));
   }
 
