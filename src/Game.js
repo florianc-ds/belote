@@ -31,6 +31,7 @@ export class Game extends React.Component {
     };
     this.playCard = this.playCard.bind(this);
     this.endRound = this.endRound.bind(this);
+    this.endGame = this.endGame.bind(this);
     this.settleWinner = this.settleWinner.bind(this);
   }
 
@@ -111,16 +112,44 @@ export class Game extends React.Component {
   }
 
   endRound() {
-    alert('END OF ROUND ' + this.state.round);
-    const winner = this.settleWinner();
+    console.log('END OF ROUND ' + this.state.round);
+    if (this.state.round < 7) {
+      const winner = this.settleWinner();
+      this.setState(prevState => ({
+        round: prevState.round + 1,
+        roundCards: { west: null, east: null, north: null, south: null },
+        roundColor: null,
+        currentPlayer: winner,
+        score: {
+          'east/west': prevState.score['east/west'] + 10,
+          'north/south': prevState.score['north/south'] + 20
+        },
+        deactivated: false
+      }));
+    } else {
+      this.endGame();
+    }
+  }
+
+  endGame() {
+    console.log('END OF GAME');
+    const EWScore = 10;
+    const NSScore = 10;
+    const shuffledCards = shuffleArray(Array.from(constants.PLAYING_CARDS));
     this.setState(prevState => ({
-      round: prevState.round + 1,
+      round: 0,
       roundCards: { west: null, east: null, north: null, south: null },
+      gameHistory: { west: [], east: [], north: [], south: [] },
+      playersCards: {
+        west: shuffledCards.slice(0, 8),
+        east: shuffledCards.slice(8, 16),
+        north: shuffledCards.slice(16, 24),
+        south: shuffledCards.slice(24, 32)
+      },
       roundColor: null,
-      currentPlayer: winner,
       score: {
-        'east/west': prevState.score['east/west'] + 10,
-        'north/south': prevState.score['north/south'] + 20
+        'east/west': prevState.score['east/west'] + EWScore,
+        'north/south': prevState.score['north/south'] + NSScore
       },
       deactivated: false
     }));
