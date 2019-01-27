@@ -226,8 +226,27 @@ export class Game extends React.Component {
             // normal round, player has not the round color but has trump color, but partner is currently winning
             return true;
           } else {
-            // normal round, player has not the round color but has trump color, and partner id not currently winning
-            return extractColorFromCardRepr(card) === state.trumpColor;
+            // normal round, player has not the round color but has trump color, and partner is not currently winning
+            const currentlyHighestTrumpRankPlayed = getCurrentlyHighestTrumpRankPlayed(
+              state.roundCards,
+              state.trumpColor
+            );
+            const playerHasHigherTrump = checkPlayerHasHigherTrump(
+              playerHand,
+              state.trumpColor,
+              currentlyHighestTrumpRankPlayed
+            );
+            if (playerHasHigherTrump) {
+              // normal round, player has to play trump, and can play higher than currently highest
+              return (
+                (constants.TRUMP_RANKING[extractValueFromCardRepr(card)] >
+                  currentlyHighestTrumpRankPlayed) &
+                (extractColorFromCardRepr(card) === state.trumpColor)
+              );
+            } else {
+              // normal round, player has to play trump, and cannot play higher than currently highest
+              return extractColorFromCardRepr(card) === state.trumpColor;
+            }
           }
         } else {
           // normal round, player has not the round color neither trump color
