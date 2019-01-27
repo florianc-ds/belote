@@ -32,7 +32,6 @@ export class Game extends React.Component {
     this.playCard = this.playCard.bind(this);
     this.endRound = this.endRound.bind(this);
     this.endGame = this.endGame.bind(this);
-    this.settleWinner = this.settleWinner.bind(this);
   }
 
   playCard(card, player) {
@@ -71,40 +70,28 @@ export class Game extends React.Component {
     }
   }
 
-  settleWinner() {
+  settleWinner(roundCards, roundColor, trumpColor) {
     var winner = null;
-    const trumpRanking = Object.keys(this.state.roundCards)
+    const trumpRanking = Object.keys(roundCards)
       .filter(
-        (k, index) =>
-          extractColorFromCardRepr(this.state.roundCards[k]) ===
-          this.state.trumpColor
+        (k, index) => extractColorFromCardRepr(roundCards[k]) === trumpColor
       )
       .sort(
         (a, b) =>
-          constants.TRUMP_RANKING[
-            extractValueFromCardRepr(this.state.roundCards[b])
-          ] -
-          constants.TRUMP_RANKING[
-            extractValueFromCardRepr(this.state.roundCards[a])
-          ]
+          constants.TRUMP_RANKING[extractValueFromCardRepr(roundCards[b])] -
+          constants.TRUMP_RANKING[extractValueFromCardRepr(roundCards[a])]
       );
     if (trumpRanking.length > 0) {
       winner = trumpRanking[0];
     } else {
-      const roundColorRanking = Object.keys(this.state.roundCards)
+      const roundColorRanking = Object.keys(roundCards)
         .filter(
-          (k, index) =>
-            extractColorFromCardRepr(this.state.roundCards[k]) ===
-            this.state.roundColor
+          (k, index) => extractColorFromCardRepr(roundCards[k]) === roundColor
         )
         .sort(
           (a, b) =>
-            constants.PLAIN_RANKING[
-              extractValueFromCardRepr(this.state.roundCards[b])
-            ] -
-            constants.PLAIN_RANKING[
-              extractValueFromCardRepr(this.state.roundCards[a])
-            ]
+            constants.PLAIN_RANKING[extractValueFromCardRepr(roundCards[b])] -
+            constants.PLAIN_RANKING[extractValueFromCardRepr(roundCards[a])]
         );
       winner = roundColorRanking[0];
     }
@@ -114,7 +101,11 @@ export class Game extends React.Component {
   endRound() {
     console.log('END OF ROUND ' + this.state.round);
     if (this.state.round < 7) {
-      const winner = this.settleWinner();
+      const winner = this.settleWinner(
+        this.state.roundCards,
+        this.state.roundColor,
+        this.state.trumpColor
+      );
       this.setState(prevState => ({
         round: prevState.round + 1,
         roundCards: { west: null, east: null, north: null, south: null },
