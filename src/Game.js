@@ -49,6 +49,9 @@ export class Game extends React.Component {
         [player]: card
       }
     }));
+    // place a copy of card in history
+    this.state.gameHistory[player].push(card);
+    // various actions according to position of player in turn
     const nbPlayedCards = Object.values(this.state.roundCards).filter(
       v => v != null
     ).length;
