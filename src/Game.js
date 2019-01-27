@@ -161,6 +161,12 @@ export class Game extends React.Component {
         south: shuffledCards.slice(24, 32)
       }
     }));
+    alert(
+      'East + West ==> ' +
+        this.state.score['east/west'] +
+        '\nNorth + South ==> ' +
+        this.state.score['north/south']
+    );
   }
 
   checkPlayability(card, player, state) {
