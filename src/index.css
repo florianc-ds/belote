@@ -52,6 +52,8 @@ button:focus {outline:0;} /* Remove blue border when button is clicked */
     left: 10px;
     top: 50%;
     transform: translate(0%, -50%);
+    text-align: center;
+    width: 28%;
 }
 
 .east {
@@ -59,6 +61,8 @@ button:focus {outline:0;} /* Remove blue border when button is clicked */
     right: 10px;
     top: 50%;
     transform: translate(0%, -50%);
+    text-align: center;
+    width: 28%;
 }
 
 .north {
@@ -94,5 +98,8 @@ button:focus {outline:0;} /* Remove blue border when button is clicked */
 }
 .status {
     margin-bottom: 5px;
-    text-align:center;
+    font-size: 1.3em;
+    background: rgb(162, 167, 159);
+    display: inline-block;
+    width: 150px;
 }
