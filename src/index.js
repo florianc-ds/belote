@@ -10,11 +10,14 @@ import { Game } from './Game';
  */
 
 /*
-1) FEATURE: ADD AUCTION PROCESS
-  -) auction = trump color + bet
-  -) can only place auction if higher than previous
-  -) use up/down counter button for auctions
-  -) auction ends when 4 pass
+1) FEATURE: ADD AUCTION PROCESS 
+  A) BUGS:
+    -> prevent player from submitting if no color has been set
+    -> fix first player defaultValue to be set as value even if passed...
+    -> fix minimalBidValue bug (should be updated after another player placed a bid...)
+  B) AUCTION STATE
+    -> create new Component AuctionState to display current state of auction: current best bid (value + color) + corresponding player
+    -> place in place of RoundCards during mode='auction'
 2) DEFINE 3 DIFFERENT MODES FOR CARDS RENDERING (add 'mode' to props of card, filled by parent (Hand or RoundCards) + update Card.render):
   -> hidden = hand of waiting players (all black)
   -> played = round cards (visible but no green/red margin on hovering)
