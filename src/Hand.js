@@ -3,6 +3,7 @@ import { Card } from './Card';
 import * as constants from './constants.js';
 import hourglass from './images/hourglass.png';
 import gears from './images/gears.png';
+import { BiddingBoard } from './BiddingBoard';
 
 export class Hand extends React.Component {
   renderCards(props) {
@@ -26,7 +27,7 @@ export class Hand extends React.Component {
 
   hasPlayed() {}
 
-  render() {
+  renderStatus() {
     let status = null;
     let image = null;
     if (this.props.isCurrentPlayer) {
@@ -37,11 +38,35 @@ export class Hand extends React.Component {
       image = hourglass;
     }
     return (
+      <div className="status">
+        <img src={image} alt={status} width="25" height="25" />
+        &nbsp; {status}
+      </div>
+    );
+  }
+
+  renderBiddingBoard(props) {
+    return (
+      <BiddingBoard
+        player={props.player}
+        isCurrentPlayer={props.isCurrentPlayer}
+        placeBid={props.placeBid}
+        passAuction={props.passAuction}
+        playersBids={props.playersBids}
+      />
+    );
+  }
+
+  render() {
+    let playerInfo = null;
+    if (this.props.mode === 'auction') {
+      playerInfo = this.renderBiddingBoard(this.props);
+    } else {
+      playerInfo = this.renderStatus();
+    }
+    return (
       <div className={this.props.player}>
-        <div className="status">
-          <img src={image} alt={status} width="25" height="25" />
-          &nbsp; {status}
-        </div>
+        {playerInfo}
         <div className="cards-hand">{this.renderCards(this.props)}</div>
       </div>
     );

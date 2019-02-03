@@ -103,3 +103,20 @@ button:focus {outline:0;} /* Remove blue border when button is clicked */
     display: inline-block;
     width: 150px;
 }
+
+.bidding-board {
+    margin-bottom: 10px;
+    background: rgb(162, 167, 159);
+    display: inline-block;
+    width: 340px;
+}
+
+.bidding-board input[type="number"]{
+    width:45px;
+    font-size:14px;
+    text-align: center;
+ }
+
+ .bidding-board select{
+    font-size:14px;
+ }

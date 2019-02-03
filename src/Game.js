@@ -13,6 +13,7 @@ export class Game extends React.Component {
     super(props);
     const shuffledCards = shuffleArray(Array.from(constants.PLAYING_CARDS));
     this.state = {
+      mode: 'auction',
       round: 0,
       playersCards: {
         west: shuffledCards.slice(0, 8),
@@ -20,18 +21,64 @@ export class Game extends React.Component {
         north: shuffledCards.slice(16, 24),
         south: shuffledCards.slice(24, 32)
       },
+      playersBids: {
+        west: { value: null, color: null },
+        east: { value: null, color: null },
+        north: { value: 90, color: 's' },
+        south: { value: null, color: null }
+      },
+      auctionPassedTurnInRow: 0,
       gameHistory: { west: [], east: [], north: [], south: [] },
       roundCards: { west: null, east: null, north: null, south: null },
       score: { 'east/west': 0, 'north/south': 0 },
       gameFirstPlayer: 'west',
       currentPlayer: 'west',
+      contract: null,
       trumpColor: 'h',
       roundColor: null,
       deactivated: false // parameter used to describe a frozen state where nothing is activable
     };
     this.playCard = this.playCard.bind(this);
+    this.placeBid = this.placeBid.bind(this);
+    this.passAuction = this.passAuction.bind(this);
     this.endRound = this.endRound.bind(this);
     this.endGame = this.endGame.bind(this);
+  }
+
+  placeBid(value, color, player) {
+    console.log(player + ' placed a bid of ' + value + ' on ' + color);
+    this.setState(prevState => ({
+      auctionPassedTurnInRow: 0,
+      currentPlayer: constants.NEXT_PLAYER[prevState.currentPlayer],
+      ...prevState.playersBids,
+      [player]: (value, color)
+    }));
+  }
+
+  passAuction() {
+    if (this.state.auctionPassedTurnInRow === 3) {
+      const validBids = Object.values(this.state.playersBids).filter(
+        bid => bid['value'] != null
+      );
+      if (validBids.length > 0) {
+        // 4 passed in a row and at least one player spoke
+        const bestBid = validBids.sort((a, b) => a['value'] - b['value'])[0];
+        this.setState(prevState => ({
+          trumpColor: bestBid['color'],
+          contract: bestBid['value'],
+          mode: 'play',
+          currentPlayer: constants.NEXT_PLAYER[prevState.currentPlayer]
+        }));
+      } else {
+        // 4 passed and none spoke
+        alert('NO ONE WANTS TO PLAY WITH ME...');
+      }
+    } else {
+      this.setState(prevState => ({
+        auctionPassedTurnInRow: prevState.auctionPassedTurnInRow + 1,
+        currentPlayer: constants.NEXT_PLAYER[prevState.currentPlayer]
+      }));
+    }
   }
 
   playCard(card, player) {
@@ -318,7 +365,11 @@ export class Game extends React.Component {
             arePlayableCards={this.state.playersCards['west'].map(c =>
               this.checkPlayability(c, 'west', this.state)
             )}
+            placeBid={this.placeBid}
+            passAuction={this.passAuction}
+            playersBids={this.state.playersBids}
             playCard={this.playCard}
+            mode={this.state.mode}
           />
           <Hand
             player="east"
@@ -327,7 +378,11 @@ export class Game extends React.Component {
             arePlayableCards={this.state.playersCards['east'].map(c =>
               this.checkPlayability(c, 'east', this.state)
             )}
+            placeBid={this.placeBid}
+            passAuction={this.passAuction}
+            playersBids={this.state.playersBids}
             playCard={this.playCard}
+            mode={this.state.mode}
           />
           <Hand
             player="north"
@@ -336,7 +391,11 @@ export class Game extends React.Component {
             arePlayableCards={this.state.playersCards['north'].map(c =>
               this.checkPlayability(c, 'north', this.state)
             )}
+            placeBid={this.placeBid}
+            passAuction={this.passAuction}
+            playersBids={this.state.playersBids}
             playCard={this.playCard}
+            mode={this.state.mode}
           />
           <Hand
             player="south"
@@ -345,7 +404,11 @@ export class Game extends React.Component {
             arePlayableCards={this.state.playersCards['south'].map(c =>
               this.checkPlayability(c, 'south', this.state)
             )}
+            placeBid={this.placeBid}
+            passAuction={this.passAuction}
+            playersBids={this.state.playersBids}
             playCard={this.playCard}
+            mode={this.state.mode}
           />
           <RoundCards cards={this.state.roundCards} />
         </div>
