@@ -202,6 +202,7 @@ export class Game extends React.Component {
     console.log('END OF GAME');
     const shuffledCards = shuffleArray(Array.from(constants.PLAYING_CARDS));
     this.setState(prevState => ({
+      mode: 'auction',
       round: 0,
       gameHistory: { west: [], east: [], north: [], south: [] },
       playersCards: {
