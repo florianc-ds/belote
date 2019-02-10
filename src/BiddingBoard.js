@@ -25,6 +25,7 @@ export class BiddingBoard extends React.Component {
     let bidValue = this.state.value;
     if (bidValue == null) {
       bidValue = this.deduceMinimalBid(this.props.playersBids);
+      this.setState({ value: parseInt(bidValue) });
     }
     this.placeBid(bidValue, this.state.color, this.props.player);
     event.preventDefault();
