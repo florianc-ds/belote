@@ -428,8 +428,12 @@ export class Game extends React.Component {
           <p>Club -> &#x2663;</p>
           <p>Diamond -> &#x2666;</p>
           <p>
-            Current Trump Color:{' '}
-            {constants.COLOR_TO_SYMBOL[this.state.trumpColor]}
+            Current Trump Color:
+            {' ' + constants.COLOR_TO_SYMBOL[this.state.trumpColor]}
+          </p>
+          <p>
+            Current Contract:
+            {' ' + this.state.contract}
           </p>
         </div>
       </>
