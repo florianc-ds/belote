@@ -10,10 +10,8 @@ import { Game } from './Game';
  */
 
 /*
-1) FEATURE: ADD AUCTION PROCESS 
-  A) BUGS:
-    -> fix first player defaultValue to be set as value even if passed...
-    -> prevent player from submitting if no color has been set
+1) FEATURE: ADD AUCTION PROCESS
+  A) BIDDING BOARD ✓
   B) AUCTION STATE
     -> create new Component AuctionState to display current state of auction: current best bid (value + color) + corresponding player
     -> place in place of RoundCards during mode='auction'
