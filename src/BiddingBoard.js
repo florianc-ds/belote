@@ -14,7 +14,7 @@ export class BiddingBoard extends React.Component {
   }
 
   updateValue(newValue) {
-    this.setState({ value: newValue });
+    this.setState({ value: parseInt(newValue) });
   }
 
   updateColor(newColor) {
@@ -36,10 +36,10 @@ export class BiddingBoard extends React.Component {
     const validBids = Object.values(this.props.playersBids).filter(
       bid => bid['value'] != null
     );
-    let minimalBidValue = '80';
+    let minimalBidValue = 80;
     if (validBids.length > 0) {
       minimalBidValue =
-        validBids.sort((a, b) => a['value'] - b['value'])[0]['value'] + 10;
+        validBids.sort((a, b) => b['value'] - a['value'])[0]['value'] + 10;
     }
     return (
       <div className="bidding-board">
@@ -51,7 +51,7 @@ export class BiddingBoard extends React.Component {
               this.props.isCurrentPlayer ? minimalBidValue : this.state.value
             }
             min={minimalBidValue}
-            step="10"
+            step={10}
             onChange={event => this.updateValue(event.target.value)}
           />
           <select

@@ -24,7 +24,7 @@ export class Game extends React.Component {
       playersBids: {
         west: { value: null, color: null },
         east: { value: null, color: null },
-        north: { value: 90, color: 's' },
+        north: { value: null, color: null },
         south: { value: null, color: null }
       },
       auctionPassedTurnInRow: 0,
@@ -50,8 +50,10 @@ export class Game extends React.Component {
     this.setState(prevState => ({
       auctionPassedTurnInRow: 0,
       currentPlayer: constants.NEXT_PLAYER[prevState.currentPlayer],
-      ...prevState.playersBids,
-      [player]: (value, color)
+      playersBids: {
+        ...prevState.playersBids,
+        [player]: { value: value, color: color }
+      }
     }));
   }
 
