@@ -22,8 +22,24 @@ export class BiddingBoard extends React.Component {
   }
 
   submitBid(event) {
-    this.placeBid(this.state.value, this.state.color, this.props.player);
+    let bidValue = this.state.value;
+    if (bidValue == null) {
+      bidValue = this.deduceMinimalBid(this.props.playersBids);
+    }
+    this.placeBid(bidValue, this.state.color, this.props.player);
     event.preventDefault();
+  }
+
+  deduceMinimalBid(playersBids) {
+    const validBids = Object.values(playersBids).filter(
+      bid => bid['value'] != null
+    );
+    let minimalBidValue = 80;
+    if (validBids.length > 0) {
+      minimalBidValue =
+        validBids.sort((a, b) => b['value'] - a['value'])[0]['value'] + 10;
+    }
+    return minimalBidValue;
   }
 
   renderPassButton(playerTurn) {
@@ -33,22 +49,16 @@ export class BiddingBoard extends React.Component {
   }
 
   render() {
-    const validBids = Object.values(this.props.playersBids).filter(
-      bid => bid['value'] != null
-    );
-    let minimalBidValue = 80;
-    if (validBids.length > 0) {
-      minimalBidValue =
-        validBids.sort((a, b) => b['value'] - a['value'])[0]['value'] + 10;
-    }
+    const minimalBidValue = this.deduceMinimalBid(this.props.playersBids);
+    const playerBidValue = this.state.value == null ? '' : this.state.value;
     return (
       <div className="bidding-board">
         <form onSubmit={this.submitBid}>
           <input
             disabled={!this.props.isCurrentPlayer}
             type="number"
-            defaultValue={
-              this.props.isCurrentPlayer ? minimalBidValue : this.state.value
+            value={
+              this.props.isCurrentPlayer ? minimalBidValue : playerBidValue
             }
             min={minimalBidValue}
             step={10}
