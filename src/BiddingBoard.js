@@ -24,12 +24,16 @@ export class BiddingBoard extends React.Component {
   }
 
   submitBid(event) {
-    let bidValue = this.state.value;
-    if (bidValue == null) {
-      bidValue = this.deduceMinimalBid(this.props.playersBids);
-      this.setState({ value: parseInt(bidValue) });
+    if (this.state.color == null) {
+      alert('Can not place bid on...nothing');
+    } else {
+      let bidValue = this.state.value;
+      if (bidValue == null) {
+        bidValue = this.deduceMinimalBid(this.props.playersBids);
+        this.setState({ value: parseInt(bidValue) });
+      }
+      this.placeBid(bidValue, this.state.color, this.props.player);
     }
-    this.placeBid(bidValue, this.state.color, this.props.player);
     event.preventDefault();
   }
 
