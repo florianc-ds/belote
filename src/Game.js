@@ -6,6 +6,7 @@ import {
 } from './helpers';
 import { Hand } from './Hand';
 import { RoundCards } from './RoundCards';
+import { AuctionState } from './AuctionState';
 import * as constants from './constants.js';
 
 export class Game extends React.Component {
@@ -356,6 +357,12 @@ export class Game extends React.Component {
   }
 
   render() {
+    const boardGameCenterComponent =
+      this.state.mode === 'auction' ? (
+        <AuctionState playersBids={this.state.playersBids} />
+      ) : (
+        <RoundCards cards={this.state.roundCards} />
+      );
     return (
       <>
         <header> Welcome to Belote my friend </header>
@@ -412,7 +419,7 @@ export class Game extends React.Component {
             playCard={this.playCard}
             mode={this.state.mode}
           />
-          <RoundCards cards={this.state.roundCards} />
+          {boardGameCenterComponent}
         </div>
         <div className="rules">
           <p>Heart -> &#x2665;</p>
