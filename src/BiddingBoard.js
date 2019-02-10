@@ -51,16 +51,19 @@ export class BiddingBoard extends React.Component {
 
   render() {
     const minimalBidValue = this.deduceMinimalBid(this.props.playersBids);
-    const playerBidValue = this.state.value == null ? '' : this.state.value;
+    let bidValue;
+    if (this.props.isCurrentPlayer) {
+      bidValue = Math.max(minimalBidValue, this.state.value);
+    } else {
+      bidValue = this.state.value == null ? '' : this.state.value;
+    }
     return (
       <div className="bidding-board">
         <form onSubmit={this.submitBid}>
           <input
             disabled={!this.props.isCurrentPlayer}
             type="number"
-            value={
-              this.props.isCurrentPlayer ? minimalBidValue : playerBidValue
-            }
+            value={bidValue}
             min={minimalBidValue}
             step={10}
             onChange={event => this.updateValue(event.target.value)}
