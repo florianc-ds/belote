@@ -9,7 +9,9 @@ export class BiddingBoard extends React.Component {
       value: props.playersBids[props.player]['value']
     };
     this.placeBid = props.placeBid.bind(this);
-    this.passAuction = props.passAuction.bind(this);
+    this.passAuctionAndResetChanges = this.passAuctionAndResetChanges.bind(
+      this
+    );
     this.submitBid = this.submitBid.bind(this);
   }
 
@@ -31,6 +33,14 @@ export class BiddingBoard extends React.Component {
     event.preventDefault();
   }
 
+  passAuctionAndResetChanges() {
+    this.setState({
+      value: this.props.playersBids[this.props.player]['value'],
+      color: this.props.playersBids[this.props.player]['color']
+    });
+    this.props.passAuction();
+  }
+
   deduceMinimalBid(playersBids) {
     const validBids = Object.values(playersBids).filter(
       bid => bid['value'] != null
@@ -45,7 +55,7 @@ export class BiddingBoard extends React.Component {
 
   renderPassButton(playerTurn) {
     if (playerTurn) {
-      return <button onClick={this.passAuction}>Pass</button>;
+      return <button onClick={this.passAuctionAndResetChanges}>Pass</button>;
     }
   }
 
@@ -70,7 +80,7 @@ export class BiddingBoard extends React.Component {
           />
           <select
             disabled={!this.props.isCurrentPlayer}
-            defaultValue={this.state.color == null ? 'empty' : this.state.color}
+            value={this.state.color == null ? 'empty' : this.state.color}
             onChange={event => this.updateColor(event.target.value)}
           >
             <option disabled value="empty" />
