@@ -96,6 +96,17 @@ button:focus {outline:0;} /* Remove blue border when button is clicked */
     transform: translate(-50%, -50%);
     border: 1px solid rgb(0, 0, 0);
 }
+
+.auction-state {
+    font-size: 2em;
+    color: white;
+    position: relative;
+    float: left;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .status {
     margin-bottom: 5px;
     font-size: 1.3em;

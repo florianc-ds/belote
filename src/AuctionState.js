@@ -11,13 +11,17 @@ export class AuctionState extends React.Component {
       const bestBidder = bidders.sort(
         (a, b) => playersBids[b]['value'] - playersBids[a]['value']
       )[0];
+      const realColor = ['s', 'c'].includes(playersBids[bestBidder]['color'])
+        ? 'black'
+        : 'red';
       return (
         <div>
           <p>{bestBidder}</p>
           <p>
-            {playersBids[bestBidder]['value'] +
-              ' ' +
-              constants.COLOR_TO_SYMBOL[playersBids[bestBidder]['color']]}
+            {playersBids[bestBidder]['value'] + ' '}
+            <span className={realColor}>
+              {constants.COLOR_TO_SYMBOL[playersBids[bestBidder]['color']]}
+            </span>
           </p>
         </div>
       );
@@ -27,6 +31,10 @@ export class AuctionState extends React.Component {
   }
 
   render() {
-    return <div className="board-game-center">{this.renderAuctionState()}</div>;
+    return (
+      <div className="board-game-center">
+        <div className="auction-state">{this.renderAuctionState()}</div>
+      </div>
+    );
   }
 }
