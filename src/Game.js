@@ -35,7 +35,7 @@ export class Game extends React.Component {
       gameFirstPlayer: 'west',
       currentPlayer: 'west',
       contract: null,
-      trumpColor: 'h',
+      trumpColor: null,
       roundColor: null,
       deactivated: false // parameter used to describe a frozen state where nothing is activable
     };
