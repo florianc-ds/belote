@@ -59,12 +59,12 @@ export class Game extends React.Component {
   }
 
   passAuction() {
-    if (this.state.auctionPassedTurnInRow === 3) {
+    if (this.state.auctionPassedTurnInRow === 2) {
       const validBids = Object.values(this.state.playersBids).filter(
         bid => bid['value'] != null
       );
       if (validBids.length > 0) {
-        // 4 passed in a row and at least one player spoke
+        // 3 passed in a row and at least one player spoke
         const bestBid = validBids.sort((a, b) => a['value'] - b['value'])[0];
         this.setState(prevState => ({
           trumpColor: bestBid['color'],
@@ -73,7 +73,7 @@ export class Game extends React.Component {
           currentPlayer: constants.NEXT_PLAYER[prevState.currentPlayer]
         }));
       } else {
-        // 4 passed and none spoke
+        // 3 passed and none spoke
         alert('NO ONE WANTS TO PLAY WITH ME...');
       }
     } else {
