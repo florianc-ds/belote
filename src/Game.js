@@ -210,7 +210,16 @@ export class Game extends React.Component {
         east: shuffledCards.slice(8, 16),
         north: shuffledCards.slice(16, 24),
         south: shuffledCards.slice(24, 32)
-      }
+      },
+      playersBids: {
+        west: { value: null, color: null },
+        east: { value: null, color: null },
+        north: { value: null, color: null },
+        south: { value: null, color: null }
+      },
+      auctionPassedTurnInRow: 0,
+      contract: null,
+      trumpColor: null
     }));
     alert(
       'East + West ==> ' +
