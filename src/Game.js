@@ -219,7 +219,9 @@ export class Game extends React.Component {
       },
       auctionPassedTurnInRow: 0,
       contract: null,
-      trumpColor: null
+      trumpColor: null,
+      gameFirstPlayer: constants.NEXT_PLAYER[prevState.gameFirstPlayer],
+      currentPlayer: constants.NEXT_PLAYER[prevState.gameFirstPlayer]
     }));
     alert(
       'East + West ==> ' +
