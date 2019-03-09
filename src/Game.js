@@ -258,22 +258,43 @@ export class Game extends React.Component {
           ).length > 0
       );
     }
-    function checkPartnerPlayedCurrentlyHighestColorCard(
+    function checkPartnerIsCurrentlyLeading(
       player,
       roundCards,
-      roundColor
+      roundColor,
+      trumpColor
     ) {
-      return (
-        roundCards[constants.PARTNER[player]] ===
+      const trumpPlayed =
         Object.values(roundCards)
           .filter(c => c != null)
-          .filter(c => extractColorFromCardRepr(c) === roundColor)
-          .sort(
-            (a, b) =>
-              constants.PLAIN_RANKING[extractValueFromCardRepr(b)] -
-              constants.PLAIN_RANKING[extractValueFromCardRepr(a)]
-          )[0]
-      );
+          .filter(c => extractColorFromCardRepr(c) === trumpColor).length > 0;
+      if (trumpPlayed) {
+        // partner is leading only if he has played the currently highest trump card
+        return (
+          roundCards[constants.PARTNER[player]] ===
+          Object.values(roundCards)
+            .filter(c => c != null)
+            .filter(c => extractColorFromCardRepr(c) === trumpColor)
+            .sort(
+              (a, b) =>
+                constants.TRUMP_RANKING[extractValueFromCardRepr(b)] -
+                constants.TRUMP_RANKING[extractValueFromCardRepr(a)]
+            )[0]
+        );
+      } else {
+        // partner is leading only if he has played the currently highest color card
+        return (
+          roundCards[constants.PARTNER[player]] ===
+          Object.values(roundCards)
+            .filter(c => c != null)
+            .filter(c => extractColorFromCardRepr(c) === roundColor)
+            .sort(
+              (a, b) =>
+                constants.PLAIN_RANKING[extractValueFromCardRepr(b)] -
+                constants.PLAIN_RANKING[extractValueFromCardRepr(a)]
+            )[0]
+        );
+      }
     }
 
     if (state.deactivated | (player !== state.currentPlayer)) {
@@ -325,12 +346,13 @@ export class Game extends React.Component {
           // normal round and player has round color
           return extractColorFromCardRepr(card) === state.roundColor;
         } else if (playerHasTrumpColor) {
-          const partnerPlayedCurrentlyHighestColorCard = checkPartnerPlayedCurrentlyHighestColorCard(
+          const partnerIsCurrentlyLeading = checkPartnerIsCurrentlyLeading(
             player,
             state.roundCards,
-            state.roundColor
+            state.roundColor,
+            state.trumpColor
           );
-          if (partnerPlayedCurrentlyHighestColorCard) {
+          if (partnerIsCurrentlyLeading) {
             // normal round, player has not the round color but has trump color, but partner is currently winning
             return true;
           } else {
