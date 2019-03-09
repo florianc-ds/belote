@@ -297,7 +297,11 @@ export class Game extends React.Component {
       }
     }
 
-    if (state.deactivated | (player !== state.currentPlayer)) {
+    if (
+      state.deactivated |
+      (player !== state.currentPlayer) |
+      (state.mode !== constants.PLAY_MODE)
+    ) {
       // not player turn
       return false;
     } else if (state.roundColor == null) {
