@@ -14,7 +14,7 @@ export class Game extends React.Component {
     super(props);
     const shuffledCards = shuffleArray(Array.from(constants.PLAYING_CARDS));
     this.state = {
-      mode: 'auction',
+      mode: constants.AUCTION_MODE,
       round: 0,
       playersCards: {
         west: shuffledCards.slice(0, 8),
@@ -69,7 +69,7 @@ export class Game extends React.Component {
         this.setState(prevState => ({
           trumpColor: bestBid['color'],
           contract: bestBid['value'],
-          mode: 'play',
+          mode: constants.PLAY_MODE,
           currentPlayer: prevState.gameFirstPlayer
         }));
       } else {
@@ -202,7 +202,7 @@ export class Game extends React.Component {
     console.log('END OF GAME');
     const shuffledCards = shuffleArray(Array.from(constants.PLAYING_CARDS));
     this.setState(prevState => ({
-      mode: 'auction',
+      mode: constants.AUCTION_MODE,
       round: 0,
       gameHistory: { west: [], east: [], north: [], south: [] },
       playersCards: {
@@ -392,7 +392,7 @@ export class Game extends React.Component {
 
   render() {
     const boardGameCenterComponent =
-      this.state.mode === 'auction' ? (
+      this.state.mode === constants.AUCTION_MODE ? (
         <AuctionState playersBids={this.state.playersBids} />
       ) : (
         <RoundCards cards={this.state.roundCards} />

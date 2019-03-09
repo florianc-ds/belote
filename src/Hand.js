@@ -59,7 +59,7 @@ export class Hand extends React.Component {
 
   render() {
     let playerInfo = null;
-    if (this.props.mode === 'auction') {
+    if (this.props.mode === constants.AUCTION_MODE) {
       playerInfo = this.renderBiddingBoard(this.props);
     } else {
       playerInfo = this.renderStatus();

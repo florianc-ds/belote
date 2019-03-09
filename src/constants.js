@@ -1,3 +1,6 @@
+export const PLAY_MODE = 'play';
+export const AUCTION_MODE = 'auction';
+
 export const COLOR_TO_SYMBOL = {
   s: '\u2660',
   c: '\u2663',
