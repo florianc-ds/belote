@@ -70,7 +70,7 @@ export class Game extends React.Component {
           trumpColor: bestBid['color'],
           contract: bestBid['value'],
           mode: 'play',
-          currentPlayer: constants.NEXT_PLAYER[prevState.currentPlayer]
+          currentPlayer: prevState.gameFirstPlayer
         }));
       } else {
         // 3 passed and none spoke
