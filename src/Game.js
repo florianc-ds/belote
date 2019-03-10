@@ -31,6 +31,7 @@ export class Game extends React.Component {
       auctionPassedTurnInRow: 0,
       gameHistory: { west: [], east: [], north: [], south: [] },
       roundCards: { west: null, east: null, north: null, south: null },
+      belotePlayers: { K: null, Q: null },
       score: { 'east/west': 0, 'north/south': 0 },
       gameFirstPlayer: 'west',
       currentPlayer: 'west',
@@ -164,6 +165,17 @@ export class Game extends React.Component {
     return score;
   }
 
+  getBeloteCardsPlayedDuringRound(roundCards, trumpColor) {
+    return Object.keys(roundCards)
+      .filter(p => roundCards[p] != null)
+      .filter(p => extractColorFromCardRepr(roundCards[p]) === trumpColor)
+      .filter(p => ['Q', 'K'].includes(extractValueFromCardRepr(roundCards[p])))
+      .reduce((obj, p) => {
+        obj[extractValueFromCardRepr(roundCards[p])] = p;
+        return obj;
+      }, {});
+  }
+
   endRound() {
     console.log('END OF ROUND ' + this.state.round);
     const winner = this.settleWinner(
@@ -179,6 +191,37 @@ export class Game extends React.Component {
       this.state.trumpColor,
       this.state.round
     );
+    const beloteCardsPlayedDuringRound = this.getBeloteCardsPlayedDuringRound(
+      this.state.roundCards,
+      this.state.trumpColor
+    );
+    if (Object.keys(beloteCardsPlayedDuringRound).length > 0) {
+      this.setState(prevState => ({
+        belotePlayers: {
+          Q: Object.keys(beloteCardsPlayedDuringRound).includes('Q')
+            ? beloteCardsPlayedDuringRound['Q']
+            : prevState.belotePlayers['Q'],
+          K: Object.keys(beloteCardsPlayedDuringRound).includes('K')
+            ? beloteCardsPlayedDuringRound['K']
+            : prevState.belotePlayers['K']
+        }
+      }));
+      if (this.state.belotePlayers['Q'] === this.state.belotePlayers['K']) {
+        // rebelote for a team
+        const beloteTeam = ['east', 'west'].includes(
+          this.state.belotePlayers['Q']
+        )
+          ? 'east/west'
+          : 'north/south';
+        console.log('re-belote for ' + beloteTeam);
+        this.setState(prevState => ({
+          score: {
+            ...prevState.score,
+            [beloteTeam]: prevState.score[beloteTeam] + 20
+          }
+        }));
+      }
+    }
     this.setState(prevState => ({
       roundCards: { west: null, east: null, north: null, south: null },
       roundColor: null,
@@ -218,6 +261,7 @@ export class Game extends React.Component {
         south: { value: null, color: null }
       },
       auctionPassedTurnInRow: 0,
+      belotePlayers: { K: null, Q: null },
       contract: null,
       trumpColor: null,
       gameFirstPlayer: constants.NEXT_PLAYER[prevState.gameFirstPlayer],
