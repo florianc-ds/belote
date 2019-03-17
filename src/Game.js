@@ -9,42 +9,61 @@ import { RoundCards } from './RoundCards';
 import { AuctionState } from './AuctionState';
 import * as constants from './constants.js';
 
+const initialPartialState = {
+  mode: constants.AUCTION_MODE,
+  round: 0,
+  playersBids: {
+    west: { value: null, color: null },
+    east: { value: null, color: null },
+    north: { value: null, color: null },
+    south: { value: null, color: null }
+  },
+  auctionPassedTurnInRow: 0,
+  gameHistory: { west: [], east: [], north: [], south: [] },
+  roundCards: { west: null, east: null, north: null, south: null },
+  belotePlayers: { K: null, Q: null },
+  score: { 'east/west': 0, 'north/south': 0 },
+  gameFirstPlayer: 'west',
+  currentPlayer: 'west',
+  contract: null,
+  trumpColor: null,
+  roundColor: null,
+  deactivated: false // parameter used to describe a frozen state where nothing is activable
+};
+
 export class Game extends React.Component {
   constructor(props) {
     super(props);
     const shuffledCards = shuffleArray(Array.from(constants.PLAYING_CARDS));
     this.state = {
-      mode: constants.AUCTION_MODE,
-      round: 0,
+      ...initialPartialState,
       playersCards: {
         west: shuffledCards.slice(0, 8),
         east: shuffledCards.slice(8, 16),
         north: shuffledCards.slice(16, 24),
         south: shuffledCards.slice(24, 32)
-      },
-      playersBids: {
-        west: { value: null, color: null },
-        east: { value: null, color: null },
-        north: { value: null, color: null },
-        south: { value: null, color: null }
-      },
-      auctionPassedTurnInRow: 0,
-      gameHistory: { west: [], east: [], north: [], south: [] },
-      roundCards: { west: null, east: null, north: null, south: null },
-      belotePlayers: { K: null, Q: null },
-      score: { 'east/west': 0, 'north/south': 0 },
-      gameFirstPlayer: 'west',
-      currentPlayer: 'west',
-      contract: null,
-      trumpColor: null,
-      roundColor: null,
-      deactivated: false // parameter used to describe a frozen state where nothing is activable
+      }
     };
     this.playCard = this.playCard.bind(this);
     this.placeBid = this.placeBid.bind(this);
     this.passAuction = this.passAuction.bind(this);
     this.endRound = this.endRound.bind(this);
     this.endGame = this.endGame.bind(this);
+    this.reset = this.reset.bind(this);
+  }
+
+  reset() {
+    const shuffledCards = shuffleArray(Array.from(constants.PLAYING_CARDS));
+    const initialState = {
+      ...initialPartialState,
+      playersCards: {
+        west: shuffledCards.slice(0, 8),
+        east: shuffledCards.slice(8, 16),
+        north: shuffledCards.slice(16, 24),
+        south: shuffledCards.slice(24, 32)
+      }
+    };
+    this.setState(initialState);
   }
 
   placeBid(value, color, player) {
@@ -472,12 +491,12 @@ export class Game extends React.Component {
       this.saveStateToLocalStorage.bind(this)
     );
   }
+
   componentWillUnmount() {
     window.removeEventListener(
       'beforeunload',
       this.saveStateToLocalStorage.bind(this)
     );
-
     // saves if component has a chance to unmount
     this.saveStateToLocalStorage();
   }
@@ -548,10 +567,6 @@ export class Game extends React.Component {
           {boardGameCenterComponent}
         </div>
         <div className="rules">
-          <p>Heart -> &#x2665;</p>
-          <p>Spade -> &#x2660;</p>
-          <p>Club -> &#x2663;</p>
-          <p>Diamond -> &#x2666;</p>
           <p>
             Current Trump Color:
             {' ' + constants.COLOR_TO_SYMBOL[this.state.trumpColor]}
@@ -560,6 +575,7 @@ export class Game extends React.Component {
             Current Contract:
             {' ' + this.state.contract}
           </p>
+          <button onClick={this.reset}>RESET</button>
         </div>
       </>
     );
