@@ -88,7 +88,7 @@ export class Game extends React.Component {
       if (validPlayersBids.length > 0) {
         // 3 passed in a row and at least one player spoke
         const bestPlayerBid = validPlayersBids.sort(
-          (a, b) => a[1]['value'] - b[1]['value']
+          (a, b) => b[1]['value'] - a[1]['value']
         )[0];
         this.setState(prevState => ({
           trumpColor: bestPlayerBid[1]['color'],
