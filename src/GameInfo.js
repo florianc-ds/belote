@@ -8,6 +8,8 @@ export class GameInfo extends React.Component {
         ? constants.COLOR_TO_SYMBOL[this.props.trumpColor]
         : '-';
     const contract = this.props.contract != null ? this.props.contract : '-';
+    const contractTeam =
+      this.props.contractTeam != null ? this.props.contractTeam : '-';
     return (
       <div className="game-info">
         <p>
@@ -16,7 +18,7 @@ export class GameInfo extends React.Component {
         </p>
         <p>
           Current Contract:
-          {' ' + contract}
+          {' ' + contract + ' (' + contractTeam + ')'}
         </p>
         <div align="center">
           <button onClick={this.props.reset}>RESET</button>

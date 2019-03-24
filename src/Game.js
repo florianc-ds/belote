@@ -27,6 +27,7 @@ const initialPartialState = {
   gameFirstPlayer: 'west',
   currentPlayer: 'west',
   contract: null,
+  contractTeam: null,
   trumpColor: null,
   roundColor: null,
   deactivated: false // parameter used to describe a frozen state where nothing is activable
@@ -81,15 +82,20 @@ export class Game extends React.Component {
 
   passAuction() {
     if (this.state.auctionPassedTurnInRow === 2) {
-      const validBids = Object.values(this.state.playersBids).filter(
-        bid => bid['value'] != null
-      );
-      if (validBids.length > 0) {
+      const validPlayersBids = Object.keys(this.state.playersBids)
+        .map(p => [p, this.state.playersBids[p]])
+        .filter(playerBid => playerBid[1]['value'] != null);
+      if (validPlayersBids.length > 0) {
         // 3 passed in a row and at least one player spoke
-        const bestBid = validBids.sort((a, b) => a['value'] - b['value'])[0];
+        const bestPlayerBid = validPlayersBids.sort(
+          (a, b) => a[1]['value'] - b[1]['value']
+        )[0];
         this.setState(prevState => ({
-          trumpColor: bestBid['color'],
-          contract: bestBid['value'],
+          trumpColor: bestPlayerBid[1]['color'],
+          contract: bestPlayerBid[1]['value'],
+          contractTeam: 'east/west'.includes(bestPlayerBid[0])
+            ? 'east/west'
+            : 'north/south',
           mode: constants.PLAY_MODE,
           currentPlayer: prevState.gameFirstPlayer
         }));
@@ -283,6 +289,7 @@ export class Game extends React.Component {
       auctionPassedTurnInRow: 0,
       belotePlayers: { K: null, Q: null },
       contract: null,
+      contractTeam: null,
       trumpColor: null,
       gameFirstPlayer: constants.NEXT_PLAYER[prevState.gameFirstPlayer],
       currentPlayer: constants.NEXT_PLAYER[prevState.gameFirstPlayer]
@@ -570,6 +577,7 @@ export class Game extends React.Component {
         <GameInfo
           trumpColor={this.state.trumpColor}
           contract={this.state.contract}
+          contractTeam={this.state.contractTeam}
           reset={this.reset}
         />
       </>
