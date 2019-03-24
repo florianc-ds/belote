@@ -267,7 +267,28 @@ export class Game extends React.Component {
     }
   }
 
+  displayEndGameScore(score, contract, contractTeam) {
+    var displayMessage =
+      score[contractTeam] >= contract
+        ? 'Well done ' + contractTeam + ', you made it!'
+        : 'Too bad ' + contractTeam + ', close but not enough...';
+    displayMessage += '\nEast + West ==> ' + score['east/west'];
+    if (contractTeam === 'east/west') {
+      displayMessage += ' (for ' + contract + ')';
+    }
+    displayMessage += '\nNorth + South ==> ' + score['north/south'];
+    if (contractTeam === 'north/south') {
+      displayMessage += ' (for ' + contract + ')';
+    }
+    alert(displayMessage);
+  }
+
   endGame() {
+    this.displayEndGameScore(
+      this.state.score,
+      this.state.contract,
+      this.state.contractTeam
+    );
     console.log('END OF GAME');
     const shuffledCards = shuffleArray(Array.from(constants.PLAYING_CARDS));
     this.setState(prevState => ({
@@ -294,12 +315,6 @@ export class Game extends React.Component {
       gameFirstPlayer: constants.NEXT_PLAYER[prevState.gameFirstPlayer],
       currentPlayer: constants.NEXT_PLAYER[prevState.gameFirstPlayer]
     }));
-    alert(
-      'East + West ==> ' +
-        this.state.score['east/west'] +
-        '\nNorth + South ==> ' +
-        this.state.score['north/south']
-    );
   }
 
   checkPlayability(card, player, state) {
