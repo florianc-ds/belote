@@ -8,6 +8,7 @@ import { Hand } from './Hand';
 import { RoundCards } from './RoundCards';
 import { AuctionState } from './AuctionState';
 import * as constants from './constants.js';
+import { GameInfo } from './GameInfo';
 
 const initialPartialState = {
   mode: constants.AUCTION_MODE,
@@ -566,17 +567,11 @@ export class Game extends React.Component {
           />
           {boardGameCenterComponent}
         </div>
-        <div className="rules">
-          <p>
-            Current Trump Color:
-            {' ' + constants.COLOR_TO_SYMBOL[this.state.trumpColor]}
-          </p>
-          <p>
-            Current Contract:
-            {' ' + this.state.contract}
-          </p>
-          <button onClick={this.reset}>RESET</button>
-        </div>
+        <GameInfo
+          trumpColor={this.state.trumpColor}
+          contract={this.state.contract}
+          reset={this.reset}
+        />
       </>
     );
   }
