@@ -11,10 +11,7 @@ import { Game } from './Game';
 
 /*
 1) DISPLAY FEATURES:
-  a) display team that has current contract
-  b) sort cards by point (either plain or trump)
-  c) print winner at the end of game (points > contract)
-  d) always display global score => use a global score that does not reset at new game
+  => always display global score => use a global score that does not reset at new game and a local score for each "game"
 2) WHEN NOT PLAYER TURN, SET AN API CALL API FOR NEXT MOVE
 3) FEATURE: AI AGENT: (web services..?)
   a) random
