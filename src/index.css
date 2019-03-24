@@ -81,6 +81,8 @@ button:focus {outline:0;} /* Remove blue border when button is clicked */
 
 .game-info {
     position: absolute;
+    padding-right: 5px;
+    padding-bottom: 5px;
     border: 1px solid rgb(0, 0, 0);
 }
 
