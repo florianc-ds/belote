@@ -4,7 +4,7 @@ import * as constants from './constants.js';
 export class GameInfo extends React.Component {
   render() {
     return (
-      <div className="rules">
+      <div className="game-info">
         <p>
           Current Trump Color:
           {' ' + constants.COLOR_TO_SYMBOL[this.props.trumpColor]}
