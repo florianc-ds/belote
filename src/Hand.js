@@ -7,7 +7,12 @@ import { BiddingBoard } from './BiddingBoard';
 import { extractColorFromCardRepr, extractValueFromCardRepr } from './helpers';
 
 export class Hand extends React.Component {
-  sortCards(rawValue1, rawValue2) {
+  constructor(props) {
+    super(props);
+    this.sortCards = this.sortCards.bind(this);
+  }
+
+  sortCards(rawValue1, rawValue2, trumpColor) {
     const color1 = extractColorFromCardRepr(rawValue1);
     const value1 = extractValueFromCardRepr(rawValue1);
     const color2 = extractColorFromCardRepr(rawValue2);
@@ -17,17 +22,21 @@ export class Hand extends React.Component {
         constants.COLOR_DISPLAY_ORDER.indexOf(color1) -
         constants.COLOR_DISPLAY_ORDER.indexOf(color2)
       );
-    } else if (
-      constants.PLAIN_POINTS[value1] !== constants.PLAIN_POINTS[value2]
-    ) {
-      return constants.PLAIN_POINTS[value1] - constants.PLAIN_POINTS[value2];
     } else {
-      return value1 - value2; // Hack for 7, 8 (and plain 9)
+      const points_ranking =
+        color1 === trumpColor
+          ? Object.assign({}, constants.TRUMP_POINTS)
+          : Object.assign({}, constants.PLAIN_POINTS);
+      if (points_ranking[value1] !== points_ranking[value2]) {
+        return points_ranking[value1] - points_ranking[value2];
+      } else {
+        return value1 - value2; // Hack for 7, 8 (and plain 9)
+      }
     }
   }
 
   renderCards(props) {
-    props.rawValues.sort(this.sortCards);
+    props.rawValues.sort((a, b) => this.sortCards(a, b, props.trumpColor));
     return props.rawValues.map(function(v, i) {
       return (
         <Card

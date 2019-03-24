@@ -532,6 +532,7 @@ export class Game extends React.Component {
             playersBids={this.state.playersBids}
             playCard={this.playCard}
             mode={this.state.mode}
+            trumpColor={this.state.trumpColor}
           />
           <Hand
             player="east"
@@ -545,6 +546,7 @@ export class Game extends React.Component {
             playersBids={this.state.playersBids}
             playCard={this.playCard}
             mode={this.state.mode}
+            trumpColor={this.state.trumpColor}
           />
           <Hand
             player="north"
@@ -558,6 +560,7 @@ export class Game extends React.Component {
             playersBids={this.state.playersBids}
             playCard={this.playCard}
             mode={this.state.mode}
+            trumpColor={this.state.trumpColor}
           />
           <Hand
             player="south"
@@ -571,6 +574,7 @@ export class Game extends React.Component {
             playersBids={this.state.playersBids}
             playCard={this.playCard}
             mode={this.state.mode}
+            trumpColor={this.state.trumpColor}
           />
           {boardGameCenterComponent}
         </div>
