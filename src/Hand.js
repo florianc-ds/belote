@@ -4,14 +4,30 @@ import * as constants from './constants.js';
 import hourglass from './images/hourglass.png';
 import gears from './images/gears.png';
 import { BiddingBoard } from './BiddingBoard';
+import { extractColorFromCardRepr, extractValueFromCardRepr } from './helpers';
 
 export class Hand extends React.Component {
-  renderCards(props) {
-    props.rawValues.sort(function(a, b) {
+  sortCards(rawValue1, rawValue2) {
+    const color1 = extractColorFromCardRepr(rawValue1);
+    const value1 = extractValueFromCardRepr(rawValue1);
+    const color2 = extractColorFromCardRepr(rawValue2);
+    const value2 = extractValueFromCardRepr(rawValue2);
+    if (color1 !== color2) {
       return (
-        constants.PLAYING_CARDS.indexOf(a) - constants.PLAYING_CARDS.indexOf(b)
+        constants.COLOR_DISPLAY_ORDER.indexOf(color1) -
+        constants.COLOR_DISPLAY_ORDER.indexOf(color2)
       );
-    });
+    } else if (
+      constants.PLAIN_POINTS[value1] !== constants.PLAIN_POINTS[value2]
+    ) {
+      return constants.PLAIN_POINTS[value1] - constants.PLAIN_POINTS[value2];
+    } else {
+      return value1 - value2; // Hack for 7, 8 (and plain 9)
+    }
+  }
+
+  renderCards(props) {
+    props.rawValues.sort(this.sortCards);
     return props.rawValues.map(function(v, i) {
       return (
         <Card

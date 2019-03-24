@@ -57,6 +57,8 @@ export const PLAYING_CARDS = [
   'Ac'
 ];
 
+export const COLOR_DISPLAY_ORDER = ['h', 's', 'd', 'c'];
+
 export const TRUMP_POINTS = {
   J: 20,
   '9': 14,
