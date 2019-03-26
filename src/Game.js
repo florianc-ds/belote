@@ -608,6 +608,7 @@ export class Game extends React.Component {
           trumpColor={this.state.trumpColor}
           contract={this.state.contract}
           contractTeam={this.state.contractTeam}
+          globalScore={this.state.globalScore}
           reset={this.reset}
         />
       </>

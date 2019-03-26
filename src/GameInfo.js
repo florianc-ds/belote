@@ -3,6 +3,9 @@ import * as constants from './constants.js';
 
 export class GameInfo extends React.Component {
   render() {
+    const globalScore = Object.keys(this.props.globalScore)
+      .map(team => team + ' => ' + this.props.globalScore[team])
+      .join(', ');
     const trumpSymbol =
       this.props.trumpColor != null
         ? constants.COLOR_TO_SYMBOL[this.props.trumpColor]
@@ -12,6 +15,10 @@ export class GameInfo extends React.Component {
       this.props.contractTeam != null ? this.props.contractTeam : '-';
     return (
       <div className="game-info">
+        <p>
+          SCORE:
+          {' ' + globalScore}
+        </p>
         <p>
           Current Trump Color:
           {' ' + trumpSymbol}
