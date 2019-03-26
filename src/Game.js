@@ -23,7 +23,8 @@ const initialPartialState = {
   gameHistory: { west: [], east: [], north: [], south: [] },
   roundCards: { west: null, east: null, north: null, south: null },
   belotePlayers: { K: null, Q: null },
-  score: { 'east/west': 0, 'north/south': 0 },
+  gameScore: { 'east/west': 0, 'north/south': 0 },
+  globalScore: { 'east/west': 0, 'north/south': 0 },
   gameFirstPlayer: 'west',
   currentPlayer: 'west',
   contract: null,
@@ -241,9 +242,9 @@ export class Game extends React.Component {
           : 'north/south';
         console.log('re-belote for ' + beloteTeam);
         this.setState(prevState => ({
-          score: {
-            ...prevState.score,
-            [beloteTeam]: prevState.score[beloteTeam] + 20
+          gameScore: {
+            ...prevState.gameScore,
+            [beloteTeam]: prevState.gameScore[beloteTeam] + 20
           }
         }));
       }
@@ -251,9 +252,9 @@ export class Game extends React.Component {
     this.setState(prevState => ({
       roundCards: { west: null, east: null, north: null, south: null },
       roundColor: null,
-      score: {
-        ...prevState.score,
-        [winningTeam]: prevState.score[winningTeam] + roundScore
+      gameScore: {
+        ...prevState.gameScore,
+        [winningTeam]: prevState.gameScore[winningTeam] + roundScore
       },
       deactivated: false
     }));
@@ -285,7 +286,7 @@ export class Game extends React.Component {
 
   endGame() {
     this.displayEndGameScore(
-      this.state.score,
+      this.state.gameScore,
       this.state.contract,
       this.state.contractTeam
     );
@@ -309,6 +310,14 @@ export class Game extends React.Component {
       },
       auctionPassedTurnInRow: -1,
       belotePlayers: { K: null, Q: null },
+      gameScore: { 'east/west': 0, 'north/south': 0 },
+      globalScore: {
+        'east/west':
+          prevState.globalScore['east/west'] + prevState.gameScore['east/west'],
+        'north/south':
+          prevState.globalScore['north/south'] +
+          prevState.gameScore['north/south']
+      },
       contract: null,
       contractTeam: null,
       trumpColor: null,
