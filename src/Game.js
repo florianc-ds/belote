@@ -19,7 +19,7 @@ const initialPartialState = {
     north: { value: null, color: null },
     south: { value: null, color: null }
   },
-  auctionPassedTurnInRow: 0,
+  auctionPassedTurnInRow: -1,
   gameHistory: { west: [], east: [], north: [], south: [] },
   roundCards: { west: null, east: null, north: null, south: null },
   belotePlayers: { K: null, Q: null },
@@ -307,7 +307,7 @@ export class Game extends React.Component {
         north: { value: null, color: null },
         south: { value: null, color: null }
       },
-      auctionPassedTurnInRow: 0,
+      auctionPassedTurnInRow: -1,
       belotePlayers: { K: null, Q: null },
       contract: null,
       contractTeam: null,
