@@ -533,7 +533,9 @@ export class Game extends React.Component {
       );
     return (
       <>
-        <header> Welcome to Belote my friend </header>
+        <header>
+          Welcome to <strike>Belote</strike> Coinche my friend
+        </header>
         <div className="board-game">
           <Hand
             player="west"
