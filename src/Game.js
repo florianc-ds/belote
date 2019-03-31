@@ -218,6 +218,7 @@ export class Game extends React.Component {
       this.state.trumpColor,
       this.state.round
     );
+    // Check for belote
     const beloteCardsPlayedDuringRound = this.getBeloteCardsPlayedDuringRound(
       this.state.roundCards,
       this.state.trumpColor
