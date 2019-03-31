@@ -135,7 +135,7 @@ export class Game extends React.Component {
     ).length;
     if (nbPlayedCards === 3) {
       // end the turn if last player
-      setTimeout(this.endRound, 1000);
+      setTimeout(this.endRound, constants.END_ROUND_TIMEOUT);
       this.setState({ deactivated: true });
     } else {
       if (nbPlayedCards === 0) {
@@ -156,7 +156,7 @@ export class Game extends React.Component {
               )[0];
               this.playCard(nextCard, nextPlayer);
             });
-          }, 800);
+          }, constants.AUTOPLAY_TIMEOUT);
         });
       }
     }
@@ -283,7 +283,7 @@ export class Game extends React.Component {
               )[0];
               this.playCard(nextCard, nextPlayer);
             });
-          }, 800);
+          }, constants.AUTOPLAY_TIMEOUT);
         });
       }
     } else {

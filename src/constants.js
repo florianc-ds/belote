@@ -102,3 +102,6 @@ export const PLAIN_RANKING = {
   '8': 1,
   '7': 0
 };
+
+export const END_ROUND_TIMEOUT = 1500;
+export const AUTOPLAY_TIMEOUT = 1000;
