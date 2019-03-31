@@ -49,6 +49,7 @@ export class Game extends React.Component {
       }
     };
     this.playCard = this.playCard.bind(this);
+    this.playCardAutomatically = this.playCardAutomatically.bind(this);
     this.placeBid = this.placeBid.bind(this);
     this.passAuction = this.passAuction.bind(this);
     this.endRound = this.endRound.bind(this);
@@ -104,16 +105,7 @@ export class Game extends React.Component {
         // Robot players here
         const nextPlayer = this.state.gameFirstPlayer;
         if (nextPlayer !== this.state.player) {
-          this.setState({ deactivated: true }, function() {
-            setTimeout(() => {
-              this.setState({ deactivated: false }, () => {
-                const nextCard = this.state.playersCards[nextPlayer].filter(c =>
-                  this.checkPlayability(c, nextPlayer, this.state)
-                )[0];
-                this.playCard(nextCard, nextPlayer);
-              });
-            }, constants.AUTOPLAY_TIMEOUT);
-          });
+          this.playCardAutomatically(nextPlayer);
         }
       } else {
         // 3 passed and none spoke
@@ -163,18 +155,22 @@ export class Game extends React.Component {
       // Robot players here
       const nextPlayer = constants.NEXT_PLAYER[player];
       if (nextPlayer !== this.state.player) {
-        this.setState({ deactivated: true }, function() {
-          setTimeout(() => {
-            this.setState({ deactivated: false }, () => {
-              const nextCard = this.state.playersCards[nextPlayer].filter(c =>
-                this.checkPlayability(c, nextPlayer, this.state)
-              )[0];
-              this.playCard(nextCard, nextPlayer);
-            });
-          }, constants.AUTOPLAY_TIMEOUT);
-        });
+        this.playCardAutomatically(nextPlayer);
       }
     }
+  }
+
+  playCardAutomatically(player) {
+    this.setState({ deactivated: true }, function() {
+      setTimeout(() => {
+        this.setState({ deactivated: false }, () => {
+          const nextCard = this.state.playersCards[player].filter(c =>
+            this.checkPlayability(c, player, this.state)
+          )[0];
+          this.playCard(nextCard, player);
+        });
+      }, constants.AUTOPLAY_TIMEOUT);
+    });
   }
 
   settleWinner(roundCards, roundColor, trumpColor) {
@@ -290,16 +286,7 @@ export class Game extends React.Component {
       // Robot players here
       const nextPlayer = winner;
       if (nextPlayer !== this.state.player) {
-        this.setState({ deactivated: true }, function() {
-          setTimeout(() => {
-            this.setState({ deactivated: false }, () => {
-              const nextCard = this.state.playersCards[nextPlayer].filter(c =>
-                this.checkPlayability(c, nextPlayer, this.state)
-              )[0];
-              this.playCard(nextCard, nextPlayer);
-            });
-          }, constants.AUTOPLAY_TIMEOUT);
-        });
+        this.playCardAutomatically(nextPlayer);
       }
     } else {
       this.endGame();
