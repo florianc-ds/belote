@@ -25,6 +25,7 @@ const initialPartialState = {
   belotePlayers: { K: null, Q: null },
   gameScore: { 'east/west': 0, 'north/south': 0 },
   globalScore: { 'east/west': 0, 'north/south': 0 },
+  player: 'south',
   gameFirstPlayer: 'west',
   currentPlayer: 'west',
   contract: null,
@@ -102,7 +103,7 @@ export class Game extends React.Component {
         }));
         // Robot players here
         const nextPlayer = this.state.gameFirstPlayer;
-        if (nextPlayer !== 'west') {
+        if (nextPlayer !== this.state.player) {
           this.setState({ deactivated: true }, function() {
             setTimeout(() => {
               this.setState({ deactivated: false }, () => {
@@ -161,7 +162,7 @@ export class Game extends React.Component {
       }));
       // Robot players here
       const nextPlayer = constants.NEXT_PLAYER[player];
-      if (nextPlayer !== 'west') {
+      if (nextPlayer !== this.state.player) {
         this.setState({ deactivated: true }, function() {
           setTimeout(() => {
             this.setState({ deactivated: false }, () => {
@@ -288,7 +289,7 @@ export class Game extends React.Component {
       }));
       // Robot players here
       const nextPlayer = winner;
-      if (nextPlayer !== 'west') {
+      if (nextPlayer !== this.state.player) {
         this.setState({ deactivated: true }, function() {
           setTimeout(() => {
             this.setState({ deactivated: false }, () => {
