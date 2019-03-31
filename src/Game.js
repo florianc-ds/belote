@@ -100,6 +100,20 @@ export class Game extends React.Component {
           mode: constants.PLAY_MODE,
           currentPlayer: prevState.gameFirstPlayer
         }));
+        // Robot players here
+        const nextPlayer = this.state.gameFirstPlayer;
+        if (nextPlayer !== 'west') {
+          this.setState({ deactivated: true }, function() {
+            setTimeout(() => {
+              this.setState({ deactivated: false }, () => {
+                const nextCard = this.state.playersCards[nextPlayer].filter(c =>
+                  this.checkPlayability(c, nextPlayer, this.state)
+                )[0];
+                this.playCard(nextCard, nextPlayer);
+              });
+            }, constants.AUTOPLAY_TIMEOUT);
+          });
+        }
       } else {
         // 3 passed and none spoke
         alert('NO ONE WANTS TO PLAY WITH ME...');
