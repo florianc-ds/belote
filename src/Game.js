@@ -241,12 +241,6 @@ export class Game extends React.Component {
           ? 'east/west'
           : 'north/south';
         console.log('re-belote for ' + beloteTeam);
-        this.setState(prevState => ({
-          gameScore: {
-            ...prevState.gameScore,
-            [beloteTeam]: prevState.gameScore[beloteTeam] + 20
-          }
-        }));
       }
     }
     this.setState(prevState => ({
@@ -284,6 +278,29 @@ export class Game extends React.Component {
     alert(displayMessage);
   }
 
+  computeRealEndGameScore(score, contract, contractTeam, belotePlayers) {
+    const otherTeam =
+      contractTeam === 'east/west' ? 'north/south' : 'east/west';
+    var realEndGameScore = { 'east/west': 0, 'north/south': 0 };
+    // Deal with belote
+    if (belotePlayers['Q'] === belotePlayers['K']) {
+      const beloteTeam = ['east', 'west'].includes(belotePlayers['Q'])
+        ? 'east/west'
+        : 'north/south';
+      realEndGameScore[beloteTeam] += 20;
+    }
+    // Check contract
+    if ((score[contractTeam] > 81) & (score[contractTeam] >= contract)) {
+      // contract succeeded
+      realEndGameScore[contractTeam] += score[contractTeam] + contract;
+      realEndGameScore[otherTeam] += score[otherTeam];
+    } else {
+      // contract failed
+      realEndGameScore[otherTeam] += 162 + contract;
+    }
+    return realEndGameScore;
+  }
+
   endGame() {
     this.displayEndGameScore(
       this.state.gameScore,
@@ -291,6 +308,12 @@ export class Game extends React.Component {
       this.state.contractTeam
     );
     console.log('END OF GAME');
+    const realEndGameScore = this.computeRealEndGameScore(
+      this.state.gameScore,
+      this.state.contract,
+      this.state.contractTeam,
+      this.state.belotePlayers
+    );
     const shuffledCards = shuffleArray(Array.from(constants.PLAYING_CARDS));
     this.setState(prevState => ({
       mode: constants.AUCTION_MODE,
@@ -313,10 +336,9 @@ export class Game extends React.Component {
       gameScore: { 'east/west': 0, 'north/south': 0 },
       globalScore: {
         'east/west':
-          prevState.globalScore['east/west'] + prevState.gameScore['east/west'],
+          prevState.globalScore['east/west'] + realEndGameScore['east/west'],
         'north/south':
-          prevState.globalScore['north/south'] +
-          prevState.gameScore['north/south']
+          prevState.globalScore['north/south'] + realEndGameScore['north/south']
       },
       contract: null,
       contractTeam: null,
