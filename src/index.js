@@ -10,14 +10,17 @@ import { Game } from './Game';
  */
 
 /*
-1) FIX GLOBAL SCORE COMPUTATION:
-  => For now we only add gameScore to globalScore at the end of a game... We need to compare with contract..!
-2) WHEN NOT PLAYER TURN, SET AN API CALL API FOR NEXT MOVE
-3) FEATURE: AI AGENT: (web services..?)
-  a) random
-  b) "always play highest possible"
-  c) expert
-  d) reinforcement learning
+1) SET A FLASK API AND PLUG IT TO BELOTE
+  a) set Flask
+  b) define 4 endpoints (random, highest_card, expert, reinforcement)
+  c) define random and highest_card and set remaining ones to random
+  d) use WIP commit to plug API to Belote
+2) AUTOMATE AUCTION
+  a) use a new method placeBidAutomaticallyOrPass
+  b) define adapted strategies with flask
+  c) plug both of them
+3) CREATE BELOTE DATASETS
+  -> export gameHistory at each game end 
 4) DEFINE 3 DIFFERENT MODES FOR CARDS RENDERING (add 'mode' to props of card, filled by parent (Hand or RoundCards) + update Card.render):
   -> hidden = hand of waiting players (all black)
   -> played = round cards (visible but no green/red margin on hovering)
@@ -26,6 +29,8 @@ import { Game } from './Game';
 6) DYNAMIC EFFECTS
 
 REMINDER:
+USE CONSTANTS:
+- TEAMS instead of 'east/west' & 'north/south'
 SOME FEATURE ARE NOT INTEGRATED YET:
 - annonces
 - sans/tout atout
