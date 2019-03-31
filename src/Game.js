@@ -145,6 +145,20 @@ export class Game extends React.Component {
       this.setState(prevState => ({
         currentPlayer: constants.NEXT_PLAYER[prevState.currentPlayer]
       }));
+      // Robot players here
+      const nextPlayer = constants.NEXT_PLAYER[player];
+      if (nextPlayer !== 'west') {
+        this.setState({ deactivated: true }, function() {
+          setTimeout(() => {
+            this.setState({ deactivated: false }, () => {
+              const nextCard = this.state.playersCards[nextPlayer].filter(c =>
+                this.checkPlayability(c, nextPlayer, this.state)
+              )[0];
+              this.playCard(nextCard, nextPlayer);
+            });
+          }, 800);
+        });
+      }
     }
   }
 
@@ -258,6 +272,20 @@ export class Game extends React.Component {
         round: prevState.round + 1,
         currentPlayer: winner
       }));
+      // Robot players here
+      const nextPlayer = winner;
+      if (nextPlayer !== 'west') {
+        this.setState({ deactivated: true }, function() {
+          setTimeout(() => {
+            this.setState({ deactivated: false }, () => {
+              const nextCard = this.state.playersCards[nextPlayer].filter(c =>
+                this.checkPlayability(c, nextPlayer, this.state)
+              )[0];
+              this.playCard(nextCard, nextPlayer);
+            });
+          }, 800);
+        });
+      }
     } else {
       this.endGame();
     }
