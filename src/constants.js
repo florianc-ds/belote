@@ -105,3 +105,8 @@ export const PLAIN_RANKING = {
 
 export const END_ROUND_TIMEOUT = 1500;
 export const AUTOPLAY_TIMEOUT = 1000;
+
+export const RANDOM_AGENT = 'http://localhost:5000/random';
+export const HIGHEST_CARD_AGENT = 'http://localhost:5000/highest_card';
+export const EXPERT_AGENT = 'http://localhost:5000/expert';
+export const REINFORCEMENT_AGENT = 'http://localhost:5000/reinforcement';

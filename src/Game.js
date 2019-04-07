@@ -26,6 +26,11 @@ const initialPartialState = {
   gameScore: { 'east/west': 0, 'north/south': 0 },
   globalScore: { 'east/west': 0, 'north/south': 0 },
   player: 'south',
+  agentStrategyAPI: {
+    east: constants.RANDOM_AGENT,
+    north: constants.RANDOM_AGENT,
+    west: constants.RANDOM_AGENT
+  },
   gameFirstPlayer: 'west',
   currentPlayer: 'west',
   contract: null,
@@ -105,7 +110,10 @@ export class Game extends React.Component {
         // Robot players here
         const nextPlayer = this.state.gameFirstPlayer;
         if (nextPlayer !== this.state.player) {
-          this.playCardAutomatically(nextPlayer);
+          this.playCardAutomatically(
+            nextPlayer,
+            this.state.agentStrategyAPI[nextPlayer]
+          );
         }
       } else {
         // 3 passed and none spoke
@@ -155,19 +163,47 @@ export class Game extends React.Component {
       // Robot players here
       const nextPlayer = constants.NEXT_PLAYER[player];
       if (nextPlayer !== this.state.player) {
-        this.playCardAutomatically(nextPlayer);
+        this.playCardAutomatically(
+          nextPlayer,
+          this.state.agentStrategyAPI[nextPlayer]
+        );
       }
     }
   }
 
-  playCardAutomatically(player) {
+  playCardAutomatically(player, API) {
     this.setState({ deactivated: true }, function() {
       setTimeout(() => {
         this.setState({ deactivated: false }, () => {
-          const nextCard = this.state.playersCards[player].filter(c =>
-            this.checkPlayability(c, player, this.state)
-          )[0];
-          this.playCard(nextCard, player);
+          fetch(API + '/play', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              player: player,
+              trumpColor: this.state.trumpColor,
+              playerCards: this.state.playersCards[player],
+              cardsPlayability: this.state.playersCards[player].map(c =>
+                this.checkPlayability(c, player, this.state)
+              ),
+              roundCards: this.state.roundCards,
+              roundColor: this.state.roundColor,
+              gameHistory: this.state.gameHistory,
+              contract: this.state.contract,
+              contractTeam: this.state.contractTeam,
+              globalScore: this.state.globalScore
+            })
+          })
+            .then(response => response.json())
+            .then(data => this.playCard(data.card, player));
+          // REMOVE HERE  >>>
+          // const nextCard = this.state.playersCards[player].filter(c =>
+          //   this.checkPlayability(c, player, this.state)
+          // )[0];
+          // this.playCard(nextCard, player);
+          // <<<
         });
       }, constants.AUTOPLAY_TIMEOUT);
     });
@@ -286,7 +322,10 @@ export class Game extends React.Component {
       // Robot players here
       const nextPlayer = winner;
       if (nextPlayer !== this.state.player) {
-        this.playCardAutomatically(nextPlayer);
+        this.playCardAutomatically(
+          nextPlayer,
+          this.state.agentStrategyAPI[nextPlayer]
+        );
       }
     } else {
       this.endGame();
