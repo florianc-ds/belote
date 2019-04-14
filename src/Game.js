@@ -128,6 +128,10 @@ export class Game extends React.Component {
   }
 
   playCard(card, player) {
+    // determine position of player in round
+    const nbPlayedCards = Object.values(this.state.roundCards).filter(
+      v => v != null
+    ).length;
     // remove card from player hand
     this.setState(prevState => ({
       playersCards: {
@@ -145,9 +149,6 @@ export class Game extends React.Component {
     // place a copy of card in history
     this.state.gameHistory[player].push(card);
     // various actions according to position of player in turn
-    const nbPlayedCards = Object.values(this.state.roundCards).filter(
-      v => v != null
-    ).length;
     if (nbPlayedCards === 3) {
       // end the turn if last player
       setTimeout(this.endRound, constants.END_ROUND_TIMEOUT);
