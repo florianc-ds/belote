@@ -200,12 +200,6 @@ export class Game extends React.Component {
           const data = await response.json();
           const nextCard = data['card'];
           this.playCard(nextCard, player);
-          // REMOVE HERE  >>>
-          // const nextCard = this.state.playersCards[player].filter(c =>
-          //   this.checkPlayability(c, player, this.state)
-          // )[0];
-          // this.playCard(nextCard, player);
-          // <<<
         });
       }, constants.AUTOPLAY_TIMEOUT);
     });
