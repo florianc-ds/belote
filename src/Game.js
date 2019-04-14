@@ -27,9 +27,9 @@ const initialPartialState = {
   globalScore: { 'east/west': 0, 'north/south': 0 },
   player: 'south',
   agentStrategyAPI: {
-    east: constants.RANDOM_AGENT,
-    north: constants.RANDOM_AGENT,
-    west: constants.RANDOM_AGENT
+    east: constants.HIGHEST_CARD_AGENT,
+    north: constants.EXPERT_AGENT,
+    west: constants.REINFORCEMENT_AGENT
   },
   gameFirstPlayer: 'west',
   currentPlayer: 'west',
