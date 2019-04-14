@@ -174,8 +174,8 @@ export class Game extends React.Component {
   playCardAutomatically(player, API) {
     this.setState({ deactivated: true }, function() {
       setTimeout(() => {
-        this.setState({ deactivated: false }, () => {
-          fetch(API + '/play', {
+        this.setState({ deactivated: false }, async () => {
+          const response = await fetch(API + '/play', {
             method: 'POST',
             headers: {
               Accept: 'application/json',
@@ -195,9 +195,10 @@ export class Game extends React.Component {
               contractTeam: this.state.contractTeam,
               globalScore: this.state.globalScore
             })
-          })
-            .then(response => response.json())
-            .then(data => this.playCard(data.card, player));
+          });
+          const data = await response.json();
+          const nextCard = data['card'];
+          this.playCard(nextCard, player);
           // REMOVE HERE  >>>
           // const nextCard = this.state.playersCards[player].filter(c =>
           //   this.checkPlayability(c, player, this.state)
