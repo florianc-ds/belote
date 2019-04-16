@@ -117,7 +117,27 @@ export class Game extends React.Component {
         }
       } else {
         // 3 passed and none spoke
-        alert('NO ONE WANTS TO PLAY WITH ME...');
+        console.log('No one spoke, dealing again');
+        const shuffledCards = shuffleArray(Array.from(constants.PLAYING_CARDS));
+        this.setState(prevState => ({
+          playersCards: {
+            west: shuffledCards.slice(0, 8),
+            east: shuffledCards.slice(8, 16),
+            north: shuffledCards.slice(16, 24),
+            south: shuffledCards.slice(24, 32)
+          },
+          playersBids: {
+            west: { value: null, color: null },
+            east: { value: null, color: null },
+            north: { value: null, color: null },
+            south: { value: null, color: null }
+          },
+          auctionPassedTurnInRow: -1,
+          contract: null,
+          contractTeam: null,
+          gameFirstPlayer: constants.NEXT_PLAYER[prevState.gameFirstPlayer],
+          currentPlayer: constants.NEXT_PLAYER[prevState.gameFirstPlayer]
+        }));
       }
     } else {
       this.setState(prevState => ({
