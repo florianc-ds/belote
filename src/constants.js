@@ -105,7 +105,7 @@ export const PLAIN_RANKING = {
 
 export const END_ROUND_TIMEOUT = 1500; // NEED TO BE HIGHER THAN AUTOPLAY_TIMEOUT
 export const AUTOPLAY_TIMEOUT = 1000;
-// export const AUTOBID_TIMEOUT = 1500;
+export const AUTOBID_TIMEOUT = 1500;
 
 export const RANDOM_AGENT = 'random_agent';
 export const HIGHEST_CARD_AGENT = 'highest_card_agent';

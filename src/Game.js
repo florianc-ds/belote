@@ -60,16 +60,20 @@ export class Game extends React.Component {
     this.endRound = this.endRound.bind(this);
     this.endGame = this.endGame.bind(this);
     this.reset = this.reset.bind(this);
-    // Robot bettors here
-    // const nextPlayer = this.state.gameFirstPlayer;
-    // if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
-    //   this.passOrBetAutomatically(
-    //     nextPlayer,
-    //     constants.AGENT_TO_API[this.state.agents[nextPlayer]]
-    //   );
+    // // Robot bettors here
+    // if (
+    //   (this.state.mode === constants.AUCTION_MODE) &
+    //   (this.state.auctionPassedTurnInRow === -1)
+    // ) {
+    //   // we only want to trigger automatic bet when we really create the Component (not when we refresh the page)
+    //   const nextPlayer = this.state.gameFirstPlayer;
+    //   if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
+    //     this.passOrBetAutomatically(
+    //       nextPlayer,
+    //       constants.AGENT_TO_API[this.state.agents[nextPlayer]]
+    //     );
+    //   }
     // }
-    // WARNING: INTEGRATE A CONDITION IN passOrBetAutomatically TO DEACTIVATE ITS ACTION IF NOT PURPOSEFUL,
-    //          BECAUSE THE constructor WILL BE CALLED EVERYTIME YOU REFRESH THE PAGE
   }
 
   reset() {
@@ -85,13 +89,13 @@ export class Game extends React.Component {
     };
     this.setState(initialState);
     // Robot bettors here
-    // const nextPlayer = initialPartialState[gameFirstPlayer];
-    // if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
-    //   this.passOrBetAutomatically(
-    //     nextPlayer,
-    //     constants.AGENT_TO_API[this.state.agents[nextPlayer]]
-    //   );
-    // }
+    const nextPlayer = initialPartialState['gameFirstPlayer'];
+    if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
+      this.passOrBetAutomatically(
+        nextPlayer,
+        constants.AGENT_TO_API[this.state.agents[nextPlayer]]
+      );
+    }
   }
 
   placeBid(value, color, player) {
@@ -105,13 +109,13 @@ export class Game extends React.Component {
       }
     }));
     // Robot bettors here
-    // const nextPlayer = constants.NEXT_PLAYER[player];
-    // if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
-    //   this.passOrBetAutomatically(
-    //     nextPlayer,
-    //     constants.AGENT_TO_API[this.state.agents[nextPlayer]]
-    //   );
-    // }
+    const nextPlayer = constants.NEXT_PLAYER[player];
+    if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
+      this.passOrBetAutomatically(
+        nextPlayer,
+        constants.AGENT_TO_API[this.state.agents[nextPlayer]]
+      );
+    }
   }
 
   passAuction() {
@@ -166,60 +170,54 @@ export class Game extends React.Component {
         }));
       }
     } else {
+      const currentPassingPlayer = this.state.currentPlayer;
       this.setState(prevState => ({
         auctionPassedTurnInRow: prevState.auctionPassedTurnInRow + 1,
         currentPlayer: constants.NEXT_PLAYER[prevState.currentPlayer]
       }));
       // Robot bettors here
-      // const nextPlayer = ???;
-      // if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
-      //   this.passOrBetAutomatically(
-      //     nextPlayer,
-      //     constants.AGENT_TO_API[this.state.agents[nextPlayer]]
-      //   );
-      // }
+      const nextPlayer = constants.NEXT_PLAYER[currentPassingPlayer];
+      if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
+        this.passOrBetAutomatically(
+          nextPlayer,
+          constants.AGENT_TO_API[this.state.agents[nextPlayer]]
+        );
+      }
     }
   }
 
-  // passOrBetAutomatically(player, API) {
-  //   this.setState({ deactivated: true }, function() {
-  //     setTimeout(() => {
-  //       this.setState({ deactivated: false }, async () => {
-  //         const response = await fetch(API + '/bet_or_pass', {
-  //           method: 'POST',
-  //           headers: {
-  //             Accept: 'application/json',
-  //             'Content-Type': 'application/json'
-  //           },
-  //           body: JSON.stringify({
-  //             player: player,
-  //             trumpColor: this.state.trumpColor,
-  //             playerCards: this.state.playersCards[player],
-  //             cardsPlayability: this.state.playersCards[player].map(c =>
-  //               this.checkPlayability(c, player, this.state)
-  //             ),
-  //             roundCards: this.state.roundCards,
-  //             roundColor: this.state.roundColor,
-  //             gameHistory: this.state.gameHistory,
-  //             contract: this.state.contract,
-  //             contractTeam: this.state.contractTeam,
-  //             globalScore: this.state.globalScore
-  //           })
-  //         });
-  //         const data = await response.json();
-  //         const action = data['action'];
-  //         if (action === 'pass') {
-  //           this.passAuction();
-  //         }
-  //         else if (action === 'bet') {
-  //           const value = data['value']
-  //           const color = data['color']
-  //           this.placeBid(value, color, player)
-  //         }
-  //       });
-  //     }, constants.AUTOBID_TIMEOUT);
-  //   });
-  // }
+  passOrBetAutomatically(player, API) {
+    this.setState({ deactivated: true }, function() {
+      setTimeout(() => {
+        this.setState({ deactivated: false }, async () => {
+          const response = await fetch(API + '/bet_or_pass', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              player: player,
+              playerCards: this.state.playersCards[player],
+              playersBids: this.state.playersBids,
+              auctionPassedTurnInRow: this.state.auctionPassedTurnInRow,
+              globalScore: this.state.globalScore,
+              gameFirstPlayer: this.state.gameFirstPlayer
+            })
+          });
+          const data = await response.json();
+          const action = data['action'];
+          if (action === 'pass') {
+            this.passAuction();
+          } else if (action === 'bet') {
+            const value = data['value'];
+            const color = data['color'];
+            this.placeBid(value, color, player);
+          }
+        });
+      }, constants.AUTOBID_TIMEOUT);
+    });
+  }
 
   playCard(card, player) {
     // determine position of player in round
