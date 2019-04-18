@@ -37,6 +37,7 @@ SOME FEATURE ARE NOT INTEGRATED YET:
 - (sur)coinche
 BUG:
 During Auction mode, upgrade is broken (displayed bet is not the one taken into account)
+During Auction mode, when playing automatically, no value nor color is kept displayed for players that have placed a bid
 */
 // ========================================
 
