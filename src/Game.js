@@ -26,9 +26,9 @@ const initialPartialState = {
   gameScore: { 'east/west': 0, 'north/south': 0 },
   globalScore: { 'east/west': 0, 'north/south': 0 },
   agents: {
-    east: constants.RANDOM_AGENT,
-    north: constants.RANDOM_AGENT,
-    west: constants.RANDOM_AGENT,
+    east: constants.HIGHEST_CARD_AGENT,
+    north: constants.EXPERT_AGENT,
+    west: constants.REINFORCEMENT_AGENT,
     south: constants.REAL_PLAYER
   },
   gameFirstPlayer: 'west',
