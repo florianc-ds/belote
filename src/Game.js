@@ -289,6 +289,7 @@ export class Game extends React.Component {
               roundCards: this.state.roundCards,
               roundColor: this.state.roundColor,
               gameHistory: this.state.gameHistory,
+              roundsFirstPlayer: this.state.roundsFirstPlayer,
               contract: this.state.contract,
               contractTeam: this.state.contractTeam,
               globalScore: this.state.globalScore
