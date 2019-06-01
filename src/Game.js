@@ -32,6 +32,7 @@ const initialPartialState = {
     south: constants.REAL_PLAYER
   },
   gameFirstPlayer: 'west',
+  roundsFirstPlayer: [],
   currentPlayer: 'west',
   contract: null,
   contractTeam: null,
@@ -135,6 +136,10 @@ export class Game extends React.Component {
             ? 'east/west'
             : 'north/south',
           mode: constants.PLAY_MODE,
+          roundsFirstPlayer: [
+            ...prevState.roundsFirstPlayer,
+            prevState.gameFirstPlayer
+          ],
           currentPlayer: prevState.gameFirstPlayer
         }));
         // Robot players here
@@ -405,6 +410,7 @@ export class Game extends React.Component {
     if (this.state.round < 7) {
       this.setState(prevState => ({
         round: prevState.round + 1,
+        roundsFirstPlayer: [...prevState.roundsFirstPlayer, winner],
         currentPlayer: winner
       }));
       // Robot players here
@@ -502,6 +508,7 @@ export class Game extends React.Component {
       contractTeam: null,
       trumpColor: null,
       gameFirstPlayer: constants.NEXT_PLAYER[prevState.gameFirstPlayer],
+      roundsFirstPlayer: [],
       currentPlayer: constants.NEXT_PLAYER[prevState.gameFirstPlayer]
     }));
   }
