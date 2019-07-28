@@ -286,6 +286,7 @@ export class Game extends React.Component {
               cardsPlayability: this.state.playersCards[player].map(c =>
                 this.checkPlayability(c, player, this.state)
               ),
+              round: this.state.round,
               roundCards: this.state.roundCards,
               roundColor: this.state.roundColor,
               gameHistory: this.state.gameHistory,
