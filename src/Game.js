@@ -428,16 +428,27 @@ export class Game extends React.Component {
     }
   }
 
-  displayEndGameScore(score, contract, contractTeam) {
+  displayEndGameScore(score, contract, contractTeam, belotePlayers) {
+    var scoreWithBelote = {
+      ...score
+    };
+    // Deal with belote
+    if (belotePlayers['Q'] === belotePlayers['K']) {
+      const beloteTeam = ['east', 'west'].includes(belotePlayers['Q'])
+        ? 'east/west'
+        : 'north/south';
+      scoreWithBelote[beloteTeam] += 20;
+    }
+
     var displayMessage =
       score[contractTeam] >= contract
         ? 'Well done ' + contractTeam + ', you made it!'
         : 'Too bad ' + contractTeam + ', close but not enough...';
-    displayMessage += '\nEast + West ==> ' + score['east/west'];
+    displayMessage += '\nEast + West ==> ' + scoreWithBelote['east/west'];
     if (contractTeam === 'east/west') {
       displayMessage += ' (for ' + contract + ')';
     }
-    displayMessage += '\nNorth + South ==> ' + score['north/south'];
+    displayMessage += '\nNorth + South ==> ' + scoreWithBelote['north/south'];
     if (contractTeam === 'north/south') {
       displayMessage += ' (for ' + contract + ')';
     }
@@ -471,7 +482,8 @@ export class Game extends React.Component {
     this.displayEndGameScore(
       this.state.gameScore,
       this.state.contract,
-      this.state.contractTeam
+      this.state.contractTeam,
+      this.state.belotePlayers
     );
     console.log('END OF GAME');
     const realEndGameScore = this.computeRealEndGameScore(
