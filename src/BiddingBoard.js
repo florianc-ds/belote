@@ -15,6 +15,11 @@ export class BiddingBoard extends React.Component {
     this.submitBid = this.submitBid.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ color: nextProps.playersBids[nextProps.player]['color'] });
+    this.setState({ value: nextProps.playersBids[nextProps.player]['value'] });
+  }
+
   updateValue(newValue) {
     this.setState({ value: parseInt(newValue) });
   }
