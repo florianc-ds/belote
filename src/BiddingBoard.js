@@ -27,10 +27,15 @@ export class BiddingBoard extends React.Component {
     if (this.state.color == null) {
       alert('Can not place bid on...nothing');
     } else {
+      // Did not find a better way to update value accordingly to what is displayed
+      // what is displayed ==> real up-to-date value (depending on other bets)
+      // value ==> only updated if player upgraded it through input up/down
+      //       ==> needs a trigger to be updated (up/down or submit bid...)
       let bidValue = this.state.value;
-      if (bidValue == null) {
-        bidValue = this.deduceMinimalBid(this.props.playersBids);
-        this.setState({ value: parseInt(bidValue) });
+      const minimalBidValue = this.deduceMinimalBid(this.props.playersBids);
+      if ((bidValue == null) | (bidValue < minimalBidValue)) {
+        this.setState({ value: parseInt(minimalBidValue) });
+        bidValue = minimalBidValue;
       }
       this.placeBid(bidValue, this.state.color, this.props.player);
     }
