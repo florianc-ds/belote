@@ -525,6 +525,14 @@ export class Game extends React.Component {
       roundsFirstPlayer: [],
       currentPlayer: constants.NEXT_PLAYER[prevState.gameFirstPlayer]
     }));
+    // Robot bettors here
+    const nextPlayer = this.state['currentPlayer'];
+    if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
+      this.passOrBetAutomatically(
+        nextPlayer,
+        constants.AGENT_TO_API[this.state.agents[nextPlayer]]
+      );
+    }
   }
 
   checkPlayability(card, player, state) {
