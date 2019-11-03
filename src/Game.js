@@ -25,12 +25,6 @@ const initialPartialState = {
   belotePlayers: { K: null, Q: null },
   gameScore: { 'east/west': 0, 'north/south': 0 },
   globalScore: { 'east/west': 0, 'north/south': 0 },
-  agents: {
-    east: constants.HIGHEST_CARD_AGENT,
-    north: constants.EXPERT_AGENT,
-    west: constants.REINFORCEMENT_AGENT,
-    south: constants.REAL_PLAYER
-  },
   gameFirstPlayer: 'west',
   roundsFirstPlayer: [],
   currentPlayer: 'west',
@@ -68,10 +62,10 @@ export class Game extends React.Component {
     // ) {
     //   // we only want to trigger automatic bet when we really create the Component (not when we refresh the page)
     //   const nextPlayer = this.state.gameFirstPlayer;
-    //   if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
+    //   if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
     //     this.passOrBetAutomatically(
     //       nextPlayer,
-    //       constants.AGENT_TO_API[this.state.agents[nextPlayer]]
+    //       constants.AGENT_TO_API[this.props.agents[nextPlayer]]
     //     );
     //   }
     // }
@@ -91,10 +85,10 @@ export class Game extends React.Component {
     this.setState(initialState);
     // Robot bettors here
     const nextPlayer = initialPartialState['gameFirstPlayer'];
-    if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
+    if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
       this.passOrBetAutomatically(
         nextPlayer,
-        constants.AGENT_TO_API[this.state.agents[nextPlayer]]
+        constants.AGENT_TO_API[this.props.agents[nextPlayer]]
       );
     }
   }
@@ -111,10 +105,10 @@ export class Game extends React.Component {
     }));
     // Robot bettors here
     const nextPlayer = constants.NEXT_PLAYER[player];
-    if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
+    if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
       this.passOrBetAutomatically(
         nextPlayer,
-        constants.AGENT_TO_API[this.state.agents[nextPlayer]]
+        constants.AGENT_TO_API[this.props.agents[nextPlayer]]
       );
     }
   }
@@ -144,10 +138,10 @@ export class Game extends React.Component {
         }));
         // Robot players here
         const nextPlayer = this.state.gameFirstPlayer;
-        if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
+        if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
           this.playCardAutomatically(
             nextPlayer,
-            constants.AGENT_TO_API[this.state.agents[nextPlayer]]
+            constants.AGENT_TO_API[this.props.agents[nextPlayer]]
           );
         }
       } else {
@@ -182,10 +176,10 @@ export class Game extends React.Component {
       }));
       // Robot bettors here
       const nextPlayer = constants.NEXT_PLAYER[currentPassingPlayer];
-      if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
+      if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
         this.passOrBetAutomatically(
           nextPlayer,
-          constants.AGENT_TO_API[this.state.agents[nextPlayer]]
+          constants.AGENT_TO_API[this.props.agents[nextPlayer]]
         );
       }
     }
@@ -260,10 +254,10 @@ export class Game extends React.Component {
       }));
       // Robot players here
       const nextPlayer = constants.NEXT_PLAYER[player];
-      if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
+      if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
         this.playCardAutomatically(
           nextPlayer,
-          constants.AGENT_TO_API[this.state.agents[nextPlayer]]
+          constants.AGENT_TO_API[this.props.agents[nextPlayer]]
         );
       }
     }
@@ -417,10 +411,10 @@ export class Game extends React.Component {
       }));
       // Robot players here
       const nextPlayer = winner;
-      if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
+      if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
         this.playCardAutomatically(
           nextPlayer,
-          constants.AGENT_TO_API[this.state.agents[nextPlayer]]
+          constants.AGENT_TO_API[this.props.agents[nextPlayer]]
         );
       }
     } else {
@@ -527,10 +521,10 @@ export class Game extends React.Component {
     }));
     // Robot bettors here
     const nextPlayer = this.state['currentPlayer'];
-    if (this.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
+    if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
       this.passOrBetAutomatically(
         nextPlayer,
-        constants.AGENT_TO_API[this.state.agents[nextPlayer]]
+        constants.AGENT_TO_API[this.props.agents[nextPlayer]]
       );
     }
   }
