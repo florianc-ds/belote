@@ -62,10 +62,10 @@ export class Game extends React.Component {
     // ) {
     //   // we only want to trigger automatic bet when we really create the Component (not when we refresh the page)
     //   const nextPlayer = this.state.gameFirstPlayer;
-    //   if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
+    //   if (this.props.location.state.agents[nextPlayer] !== constants.REAL_PLAYER) {
     //     this.passOrBetAutomatically(
     //       nextPlayer,
-    //       constants.AGENT_TO_API[this.props.agents[nextPlayer]]
+    //       constants.AGENT_TO_API[this.props.location.state.agents[nextPlayer]]
     //     );
     //   }
     // }
@@ -85,10 +85,12 @@ export class Game extends React.Component {
     this.setState(initialState);
     // Robot bettors here
     const nextPlayer = initialPartialState['gameFirstPlayer'];
-    if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
+    if (
+      this.props.location.state.agents[nextPlayer] !== constants.REAL_PLAYER
+    ) {
       this.passOrBetAutomatically(
         nextPlayer,
-        constants.AGENT_TO_API[this.props.agents[nextPlayer]]
+        constants.AGENT_TO_API[this.props.location.state.agents[nextPlayer]]
       );
     }
   }
@@ -105,10 +107,12 @@ export class Game extends React.Component {
     }));
     // Robot bettors here
     const nextPlayer = constants.NEXT_PLAYER[player];
-    if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
+    if (
+      this.props.location.state.agents[nextPlayer] !== constants.REAL_PLAYER
+    ) {
       this.passOrBetAutomatically(
         nextPlayer,
-        constants.AGENT_TO_API[this.props.agents[nextPlayer]]
+        constants.AGENT_TO_API[this.props.location.state.agents[nextPlayer]]
       );
     }
   }
@@ -138,10 +142,12 @@ export class Game extends React.Component {
         }));
         // Robot players here
         const nextPlayer = this.state.gameFirstPlayer;
-        if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
+        if (
+          this.props.location.state.agents[nextPlayer] !== constants.REAL_PLAYER
+        ) {
           this.playCardAutomatically(
             nextPlayer,
-            constants.AGENT_TO_API[this.props.agents[nextPlayer]]
+            constants.AGENT_TO_API[this.props.location.state.agents[nextPlayer]]
           );
         }
       } else {
@@ -176,10 +182,12 @@ export class Game extends React.Component {
       }));
       // Robot bettors here
       const nextPlayer = constants.NEXT_PLAYER[currentPassingPlayer];
-      if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
+      if (
+        this.props.location.state.agents[nextPlayer] !== constants.REAL_PLAYER
+      ) {
         this.passOrBetAutomatically(
           nextPlayer,
-          constants.AGENT_TO_API[this.props.agents[nextPlayer]]
+          constants.AGENT_TO_API[this.props.location.state.agents[nextPlayer]]
         );
       }
     }
@@ -254,10 +262,12 @@ export class Game extends React.Component {
       }));
       // Robot players here
       const nextPlayer = constants.NEXT_PLAYER[player];
-      if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
+      if (
+        this.props.location.state.agents[nextPlayer] !== constants.REAL_PLAYER
+      ) {
         this.playCardAutomatically(
           nextPlayer,
-          constants.AGENT_TO_API[this.props.agents[nextPlayer]]
+          constants.AGENT_TO_API[this.props.location.state.agents[nextPlayer]]
         );
       }
     }
@@ -328,11 +338,10 @@ export class Game extends React.Component {
 
   countRoundScore(roundCards, trumpColor, round) {
     let score = Object.values(roundCards)
-      .map(
-        c =>
-          extractColorFromCardRepr(c) === trumpColor
-            ? constants.TRUMP_POINTS[extractValueFromCardRepr(c)]
-            : constants.PLAIN_POINTS[extractValueFromCardRepr(c)]
+      .map(c =>
+        extractColorFromCardRepr(c) === trumpColor
+          ? constants.TRUMP_POINTS[extractValueFromCardRepr(c)]
+          : constants.PLAIN_POINTS[extractValueFromCardRepr(c)]
       )
       .reduce((a, b) => a + b);
     // last round counts for 10 more points
@@ -411,10 +420,12 @@ export class Game extends React.Component {
       }));
       // Robot players here
       const nextPlayer = winner;
-      if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
+      if (
+        this.props.location.state.agents[nextPlayer] !== constants.REAL_PLAYER
+      ) {
         this.playCardAutomatically(
           nextPlayer,
-          constants.AGENT_TO_API[this.props.agents[nextPlayer]]
+          constants.AGENT_TO_API[this.props.location.state.agents[nextPlayer]]
         );
       }
     } else {
@@ -521,10 +532,12 @@ export class Game extends React.Component {
     }));
     // Robot bettors here
     const nextPlayer = this.state['currentPlayer'];
-    if (this.props.agents[nextPlayer] !== constants.REAL_PLAYER) {
+    if (
+      this.props.location.state.agents[nextPlayer] !== constants.REAL_PLAYER
+    ) {
       this.passOrBetAutomatically(
         nextPlayer,
-        constants.AGENT_TO_API[this.props.agents[nextPlayer]]
+        constants.AGENT_TO_API[this.props.location.state.agents[nextPlayer]]
       );
     }
   }
@@ -718,13 +731,19 @@ export class Game extends React.Component {
 
   componentDidMount() {
     document.title = 'Belote';
-    this.hydrateStateWithLocalStorage();
-    // add event listener to save state to localStorage
-    // when user leaves/refreshes the page
     window.addEventListener(
       'beforeunload',
       this.saveStateToLocalStorage.bind(this)
     );
+    // POP action corresponds to F5 refresh (and other navigation actions: backward, forward,...)
+    if (this.props.history.action === 'POP') {
+      this.hydrateStateWithLocalStorage();
+      // add event listener to save state to localStorage
+      // when user leaves/refreshes the page
+    } else {
+      this.reset();
+      this.saveStateToLocalStorage();
+    }
   }
 
   componentWillUnmount() {

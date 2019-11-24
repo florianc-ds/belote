@@ -1,17 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { Game } from './Game';
-//import { Link } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import * as constants from './constants.js';
 
 export class Welcome extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      readyToPlay: false,
       player: null,
       partnerLevel: null,
       opponentOneLevel: null,
-      opponentTwoLevel: null
+      opponentTwoLevel: null,
+      agents: null
     };
     this.updatePlayer = this.updatePlayer.bind(this);
     this.updatePartnerLevel = this.updatePartnerLevel.bind(this);
@@ -56,17 +56,22 @@ export class Welcome extends React.Component {
       this.state.opponentOneLevel,
       this.state.opponentTwoLevel
     );
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // WARNING: DEFINE A REAL LINK/URL STRATEGY AND USE react-router
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ReactDOM.render(
-      <Game agents={gameAgents} />,
-      document.getElementById('root')
-    );
+    this.setState({ readyToPlay: true, agents: gameAgents });
     event.preventDefault();
   }
 
   render() {
+    const readyToPlay = this.state.readyToPlay;
+    if (readyToPlay === true) {
+      return (
+        <Redirect
+          to={{
+            pathname: '/game',
+            state: { agents: this.state.agents }
+          }}
+        />
+      );
+    }
     var submittable =
       (this.state.player != null) &
       (this.state.partnerLevel != null) &

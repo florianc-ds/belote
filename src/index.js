@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import './index.css';
-//import { Game } from './Game';
-//import * as constants from './constants.js';
+import { Game } from './Game';
 import { Welcome } from './Welcome';
 
 /* _--_
@@ -43,14 +43,15 @@ During Auction mode, when playing automatically, no value nor color is kept disp
 */
 // ========================================
 
-//const defaultAgents = {
-//  east: constants.HIGHEST_CARD_AGENT,
-//  north: constants.EXPERT_AGENT,
-//  west: constants.REINFORCEMENT_AGENT,
-//  south: constants.REAL_PLAYER
-//};
-//ReactDOM.render(
-//  <Game agents={defaultAgents} />,
-//  document.getElementById('root')
-//);
-ReactDOM.render(<Welcome />, document.getElementById('root'));
+const routing = (
+  <Router>
+    <div>
+      <Switch>
+        <Route exact path="/" component={Welcome} />
+        <Route path="/game" component={Game} />
+        <Route component={() => <h1>404 Not found</h1>} />
+      </Switch>
+    </div>
+  </Router>
+);
+ReactDOM.render(routing, document.getElementById('root'));
