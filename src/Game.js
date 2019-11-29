@@ -154,6 +154,7 @@ export class Game extends React.Component {
         // 3 passed and none spoke
         console.log('No one spoke, dealing again');
         const shuffledCards = shuffleArray(Array.from(constants.PLAYING_CARDS));
+        const nextPlayer = constants.NEXT_PLAYER[this.state.gameFirstPlayer];
         this.setState(prevState => ({
           playersCards: {
             west: shuffledCards.slice(0, 8),
@@ -170,9 +171,18 @@ export class Game extends React.Component {
           auctionPassedTurnInRow: -1,
           contract: null,
           contractTeam: null,
-          gameFirstPlayer: constants.NEXT_PLAYER[prevState.gameFirstPlayer],
-          currentPlayer: constants.NEXT_PLAYER[prevState.gameFirstPlayer]
+          gameFirstPlayer: nextPlayer,
+          currentPlayer: nextPlayer
         }));
+        // Robot bettors here
+        if (
+          this.props.location.state.agents[nextPlayer] !== constants.REAL_PLAYER
+        ) {
+          this.passOrBetAutomatically(
+            nextPlayer,
+            constants.AGENT_TO_API[this.props.location.state.agents[nextPlayer]]
+          );
+        }
       }
     } else {
       const currentPassingPlayer = this.state.currentPlayer;
