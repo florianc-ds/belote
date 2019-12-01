@@ -794,6 +794,7 @@ export class Game extends React.Component {
             playCard={this.playCard}
             mode={this.state.mode}
             trumpColor={this.state.trumpColor}
+            devMode={this.props.location.state.devMode}
           />
           <Hand
             player="east"
@@ -811,6 +812,7 @@ export class Game extends React.Component {
             playCard={this.playCard}
             mode={this.state.mode}
             trumpColor={this.state.trumpColor}
+            devMode={this.props.location.state.devMode}
           />
           <Hand
             player="north"
@@ -829,6 +831,7 @@ export class Game extends React.Component {
             playCard={this.playCard}
             mode={this.state.mode}
             trumpColor={this.state.trumpColor}
+            devMode={this.props.location.state.devMode}
           />
           <Hand
             player="south"
@@ -847,6 +850,7 @@ export class Game extends React.Component {
             playCard={this.playCard}
             mode={this.state.mode}
             trumpColor={this.state.trumpColor}
+            devMode={this.props.location.state.devMode}
           />
           {boardGameCenterComponent}
         </div>

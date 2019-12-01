@@ -7,17 +7,23 @@ export class Welcome extends React.Component {
     super(props);
     this.state = {
       readyToPlay: false,
+      devMode: false,
       player: null,
       partnerLevel: null,
       opponentOneLevel: null,
       opponentTwoLevel: null,
       agents: null
     };
+    this.updateDevMode = this.updateDevMode.bind(this);
     this.updatePlayer = this.updatePlayer.bind(this);
     this.updatePartnerLevel = this.updatePartnerLevel.bind(this);
     this.updateOpponentOneLevel = this.updateOpponentOneLevel.bind(this);
     this.updateOpponentTwoLevel = this.updateOpponentTwoLevel.bind(this);
     this.startGame = this.startGame.bind(this);
+  }
+
+  updateDevMode(checked) {
+    this.setState({ devMode: checked });
   }
 
   updatePlayer(newPlayer) {
@@ -67,7 +73,7 @@ export class Welcome extends React.Component {
         <Redirect
           to={{
             pathname: '/game',
-            state: { agents: this.state.agents }
+            state: { agents: this.state.agents, devMode: this.state.devMode }
           }}
         />
       );
@@ -83,6 +89,10 @@ export class Welcome extends React.Component {
           Welcome to <strike>Belote</strike> Coinche my friend
         </header>
         <form onSubmit={this.startGame}>
+          <input
+            type="checkbox"
+            onChange={event => this.updateDevMode(event.target.checked)}
+          />
           <div>What side do you want to play:</div>
           <select
             onChange={event => this.updatePlayer(event.target.value)}
