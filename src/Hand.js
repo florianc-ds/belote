@@ -45,6 +45,7 @@ export class Hand extends React.Component {
           player={props.player}
           isPlayable={props.arePlayableCards[i]}
           playCard={props.playCard}
+          toBeRendered={props.isRealPlayer}
         />
       );
     });

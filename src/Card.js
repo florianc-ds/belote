@@ -28,15 +28,21 @@ export class Card extends React.Component {
     if (this.state.isHovered) {
       classNames += this.props.isPlayable ? 'playable ' : 'not-playable ';
     }
-    return (
-      <button
-        className={classNames}
-        onClick={this.play}
-        onMouseOver={() => this.setState({ isHovered: true })}
-        onMouseLeave={() => this.setState({ isHovered: false })}
-      >
-        {this.state.value + ' ' + constants.COLOR_TO_SYMBOL[this.state.color]}
-      </button>
-    );
+    let card = null;
+    if (!this.props.toBeRendered) {
+      card = <button className="hidden-card" />;
+    } else {
+      card = (
+        <button
+          className={classNames}
+          onClick={this.play}
+          onMouseOver={() => this.setState({ isHovered: true })}
+          onMouseLeave={() => this.setState({ isHovered: false })}
+        >
+          {this.state.value + ' ' + constants.COLOR_TO_SYMBOL[this.state.color]}
+        </button>
+      );
+    }
+    return card;
   }
 }

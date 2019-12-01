@@ -28,6 +28,15 @@ header {
     width: 40px;
 }
 
+.hidden-card {
+    background: rgb(224, 165, 137);
+    border: 2px solid rgb(0, 0, 0);
+    margin-right: 2px;
+    margin-left: 2px;
+    height: 60px;
+    width: 40px;
+}
+
 button:focus {outline:0;} /* Remove blue border when button is clicked */
 
 .red {

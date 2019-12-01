@@ -782,6 +782,9 @@ export class Game extends React.Component {
             player="west"
             rawValues={this.state.playersCards['west']}
             isCurrentPlayer={'west' === this.state.currentPlayer}
+            isRealPlayer={
+              this.props.location.state.agents['west'] === constants.REAL_PLAYER
+            }
             arePlayableCards={this.state.playersCards['west'].map(c =>
               this.checkPlayability(c, 'west', this.state)
             )}
@@ -796,6 +799,9 @@ export class Game extends React.Component {
             player="east"
             rawValues={this.state.playersCards['east']}
             isCurrentPlayer={'east' === this.state.currentPlayer}
+            isRealPlayer={
+              this.props.location.state.agents['east'] === constants.REAL_PLAYER
+            }
             arePlayableCards={this.state.playersCards['east'].map(c =>
               this.checkPlayability(c, 'east', this.state)
             )}
@@ -810,6 +816,10 @@ export class Game extends React.Component {
             player="north"
             rawValues={this.state.playersCards['north']}
             isCurrentPlayer={'north' === this.state.currentPlayer}
+            isRealPlayer={
+              this.props.location.state.agents['north'] ===
+              constants.REAL_PLAYER
+            }
             arePlayableCards={this.state.playersCards['north'].map(c =>
               this.checkPlayability(c, 'north', this.state)
             )}
@@ -824,6 +834,10 @@ export class Game extends React.Component {
             player="south"
             rawValues={this.state.playersCards['south']}
             isCurrentPlayer={'south' === this.state.currentPlayer}
+            isRealPlayer={
+              this.props.location.state.agents['south'] ===
+              constants.REAL_PLAYER
+            }
             arePlayableCards={this.state.playersCards['south'].map(c =>
               this.checkPlayability(c, 'south', this.state)
             )}
