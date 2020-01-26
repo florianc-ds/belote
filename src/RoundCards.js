@@ -9,7 +9,12 @@ export class RoundCards extends React.Component {
       .map(function(k, index) {
         return (
           <div key={k} className={k}>
-            <Card key={cards[k]} rawValue={cards[k]} isPlayable={false} />
+            <Card
+              key={cards[k]}
+              rawValue={cards[k]}
+              isPlayable={false}
+              toBeRendered={true}
+            />
           </div>
         );
       });
