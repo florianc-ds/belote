@@ -43,6 +43,14 @@ During Auction mode, when playing automatically, no value nor color is kept disp
 */
 // ========================================
 
+// Disable React Developer Tools display in production
+const IS_PRODUCTION = process.env.REACT_APP_ENV === "production";
+if (IS_PRODUCTION && typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ === "object") {
+	for (let [key, value] of Object.entries(window.__REACT_DEVTOOLS_GLOBAL_HOOK__)) {
+		window.__REACT_DEVTOOLS_GLOBAL_HOOK__[key] = typeof value == "function" ? ()=>{} : null;
+	}
+}
+
 const routing = (
   <Router>
     <div>
