@@ -2,7 +2,8 @@ import React from 'react';
 import {
   shuffleArray,
   extractColorFromCardRepr,
-  extractValueFromCardRepr
+  extractValueFromCardRepr,
+  encrypt
 } from './helpers';
 import { Hand } from './Hand';
 import { RoundCards } from './RoundCards';
@@ -215,11 +216,14 @@ export class Game extends React.Component {
             },
             body: JSON.stringify({
               player: player,
-              playerCards: this.state.playersCards[player],
+              playerCards: this.state.playersCards[player].map(c =>
+                this.props.location.state.devMode ? c : encrypt(c, player)
+              ),
               playersBids: this.state.playersBids,
               auctionPassedTurnInRow: this.state.auctionPassedTurnInRow,
               globalScore: this.state.globalScore,
-              gameFirstPlayer: this.state.gameFirstPlayer
+              gameFirstPlayer: this.state.gameFirstPlayer,
+              encrypted: !this.props.location.state.devMode
             })
           });
           const data = await response.json();
@@ -296,7 +300,9 @@ export class Game extends React.Component {
             body: JSON.stringify({
               player: player,
               trumpColor: this.state.trumpColor,
-              playerCards: this.state.playersCards[player],
+              playerCards: this.state.playersCards[player].map(c =>
+                this.props.location.state.devMode ? c : encrypt(c, player)
+              ),
               cardsPlayability: this.state.playersCards[player].map(c =>
                 this.checkPlayability(c, player, this.state)
               ),
@@ -307,7 +313,8 @@ export class Game extends React.Component {
               roundsFirstPlayer: this.state.roundsFirstPlayer,
               contract: this.state.contract,
               contractTeam: this.state.contractTeam,
-              globalScore: this.state.globalScore
+              globalScore: this.state.globalScore,
+              encrypted: !this.props.location.state.devMode
             })
           });
           const data = await response.json();
