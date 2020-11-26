@@ -18,41 +18,25 @@ header {
 
 /* CARDS STYLES */
 .card {
-    background: rgb(211, 208, 208);
-    border: 2px solid rgb(0, 0, 0);
-    font-weight: bold;
-    font-size: 20px;
+    background-color: Transparent;
+    border: 1px solid transparent;
     margin-right: 2px;
     margin-left: 2px;
     height: 60px;
     width: 40px;
-}
-
-.hidden-card {
-    background: rgb(224, 165, 137);
-    border: 2px solid rgb(0, 0, 0);
-    margin-right: 2px;
-    margin-left: 2px;
-    height: 60px;
-    width: 40px;
+    padding: 0px;
 }
 
 button:focus {outline:0;} /* Remove blue border when button is clicked */
 
-.red {
-    color: rgb(165, 38, 29);
-}
-
-.black {
-    color: black;
-}
-
 .not-playable {
     border: 1px solid rgb(255, 0, 0);
+    background: rgb(255, 0, 0);
 }
 
 .playable {
     border: 1px solid rgb(6, 209, 23);
+    background: rgb(6, 209, 23);
 }
 
 /* CROSS-USE STYLES */
